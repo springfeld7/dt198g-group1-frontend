@@ -1,0 +1,14 @@
+a {
+    background-color: violet;
+    border: 1px solid black;
+    display: inline-block;
+    height: 100%;
+    padding: 0 30px;
+    text-decoration: none;
+
+    &:hover {
+        background-color: navy;
+        color: white;
+        cursor: pointer;
+    }
+}
