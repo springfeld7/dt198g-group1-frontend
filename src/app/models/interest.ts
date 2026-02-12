@@ -1,4 +1,4 @@
 export interface Interest {
-    id: number;
+    id: string;
     name: string;
 }

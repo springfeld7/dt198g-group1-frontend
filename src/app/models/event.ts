@@ -1,13 +1,15 @@
-export interface Event {
-  id: number;
+import { User } from './user';
+
+export interface Event<T extends string | User = string> {
+  id: string;
   title: string;
   description: string;
   date: Date;
   location: string;
   maxSpots: number;
-  registeredMen: number[];
-  registeredWomen: number[];
-  pairsFirstRound: [number, number][];
-  pairsSecondRound: [number, number][];
-  pairsThirdRound: [number, number][];
+  registeredMen: T[];
+  registeredWomen: T[];
+  pairsFirstRound: [T, T][];
+  pairsSecondRound: [T, T][];
+  pairsThirdRound: [T, T][];
 }
