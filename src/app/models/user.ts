@@ -1,16 +1,16 @@
+import { Interest } from "./interest";
+
 export interface User {
-    id: number;
+    id: string;
     username: string;
-    password: string;
     isAdmin: boolean;
-    firstName: string;
-    surname: string;
-    email: string;
-    phone: string;
-    location: string;
-    gender: 'man' | 'woman';
-    age: number;
-    interests: number[]; // interestsID's
-    matches: number[]; // userID's
-    registeredEvents: number[]; // eventID's
+    firstName?: string;
+    surname?: string;
+    email?: string;
+    phone?: string;
+    location?: string;
+    gender?: 'man' | 'woman';
+    age?: number;
+    interests?: Interest[];
+    matches?: string[];
 }
