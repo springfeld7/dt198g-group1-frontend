@@ -1,5 +1,5 @@
 export interface User {
-    id: number;
+    _id: string;
     username: string;
     password: string;
     isAdmin: boolean;
@@ -10,7 +10,7 @@ export interface User {
     location: string;
     gender: 'man' | 'woman';
     age: number;
-    interests: number[]; // interestsID's
-    matches: number[]; // userID's
-    registeredEvents: number[]; // eventID's
+    interests: string[]; // interestsID's
+    matches: string[]; // userID's
+    registeredEvents: string[]; // eventID's
 }
