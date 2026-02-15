@@ -1,1 +1,10 @@
-<p>login works!</p>
+<form #loginForm="ngForm" (ngSubmit)="submit()">
+    <label for="username">Username</label>
+    <input id="username" name="username" type="text" [(ngModel)]="username" placeholder="Username">
+
+    <label for="password">Password</label>
+    <input id="passwowrd" name="password" type="password" [(ngModel)]="password" placeholder="Password">
+
+    <button>Submit</button>
+
+    <div class="error invalid" [class.hide]="!errorMessage">{{ errorMessage }}</div>
