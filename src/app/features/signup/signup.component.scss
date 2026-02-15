@@ -1,0 +1,37 @@
+label {
+    display: block;
+    margin-top: 40px;
+    padding-left: 20px;
+
+    &:first-child {
+        margin-top: 40px;
+    }
+
+    &.labelForCheckbox,
+    &.labelForRadio {
+        margin-top: 0;
+        padding-left: 10px;
+    }
+}
+
+input {
+    border-width: 1px;
+    border-radius: 10px;
+    padding: 8px 12px;
+}
+
+.invalid {
+    background-color: pink;
+    border-color: red;
+}
+
+.error {
+    border-radius: 5px;
+    display: block;
+    padding: 8px 12px;
+    width: fit-content;
+}
+
+.hide {
+    display: none;
+}
