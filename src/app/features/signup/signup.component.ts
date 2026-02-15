@@ -4,6 +4,7 @@ import { User } from '../../models/user';
 import { CommonModule } from '@angular/common';
 import { Interest } from '../../models/interest';
 import { BackendServiceService } from '../../services/backend-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -14,6 +15,7 @@ import { BackendServiceService } from '../../services/backend-service.service';
 })
 export class SignupComponent {
   private backendService = inject(BackendServiceService);
+  private router = inject(Router);
 
   newUser = {
     username: "username",
@@ -55,12 +57,20 @@ export class SignupComponent {
     this.backendService.registerUser(this.newUser).then(
       (response) => {
         this.errorMessage = "";
+        this.backendService.loginUser(response.user.username, this.newUser.password).then(
+          (userData) => {
+            this.router.navigate(["/"]);
+          },
+          (error) => {
+            this.errorMessage = "Invalid credentials.";
+          }
+        )
       },
       (error) => {
         if (error instanceof Error) {
           this.errorMessage = error.message;
         } else {
-          this.errorMessage = "An unknown error occured";
+          this.errorMessage = "An unknown error occured.";
         }
       }
     );
