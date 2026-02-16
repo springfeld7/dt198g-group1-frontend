@@ -1,7 +1,8 @@
+import { Interest } from "./interest";
+
 export interface User {
     _id: string;
     username: string;
-    password: string;
     isAdmin: boolean;
     firstName: string;
     surname: string;
