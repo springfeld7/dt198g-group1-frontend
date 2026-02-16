@@ -10,13 +10,22 @@ export class BackendServiceService {
 
   constructor() {}
 
+  /**
+   * Retrieves a list of all interests from the backend.
+   * Sends a GET request to the API to fetch the data.
+   *
+   * @async
+   * @function
+   * @returns {Promise<any>} A promise that resolves to the list of interests.
+   * @throws {Error} If the request fails or the response is not successful.
+   */
   async getAllInterests(): Promise<any> {
     try {
       const response = await fetch(`${this.API_URL}/interests`, {
         method: 'GET',
         credentials: 'include',
       });
-      
+
       if (response.ok) {
         return await response.json();
       } else {
@@ -28,22 +37,31 @@ export class BackendServiceService {
     }
   }
 
+  /**
+   * Registers a new user by sending a POST request to the backend API.
+   *
+   * @async
+   * @function
+   * @param {Object} user - The user data to be registered. It includes properties like username, password, etc.
+   * @returns {Promise<any>} A promise that resolves to the created user data.
+   * @throws {Error} If the registration request fails or the backend returns an error.
+   */
   async registerUser(user: any): Promise<any> {
     try {
       // Send POST request to backend to log the user in
       const response = await fetch(`${this.API_URL}/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user),
-        credentials: "include"
+        credentials: 'include',
       });
 
       if (!response.ok) {
         const errorMsg = await response.json();
-        
+
         throw new Error(errorMsg.error);
       }
-      
+
       const createdUser = await response.json();
 
       return createdUser;
@@ -52,15 +70,26 @@ export class BackendServiceService {
     }
   }
 
+  /**
+   * Authenticates a user by sending a login request to the backend API.
+   * On successful login, the user data is saved in localStorage for session persistence.
+   *
+   * @async
+   * @function
+   * @param {string} username - The username of the user attempting to log in.
+   * @param {string} password - The password provided by the user.
+   * @returns {Promise<any>} A promise that resolves to the user data if login is successful.
+   * @throws {Error} If the login request fails or the backend returns an error.
+   */
   async loginUser(username: string, password: string): Promise<any> {
     try {
       const response = await fetch(`${this.API_URL}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username, password: password }),
-        credentials: "include"
+        credentials: 'include',
       });
-      
+
       if (!response.ok) {
         const errMsg = await response.json();
         throw new Error(errMsg.error);
@@ -68,7 +97,7 @@ export class BackendServiceService {
 
       const userData = await response.json();
 
-      localStorage.setItem("user", JSON.stringify(userData.user));
+      localStorage.setItem('user', JSON.stringify(userData.user));
 
       return userData;
     } catch (error: any) {
