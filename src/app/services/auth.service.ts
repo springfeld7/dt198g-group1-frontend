@@ -43,17 +43,8 @@ export class AuthService {
    * @return {string} user id or empty string if does not exist.
    */
   getUserId(): string {
-    const user = sessionStorage.getItem('user');
-    if (user) {
-      try {
-        const parsedUser = JSON.parse(user);
-        return parsedUser.id || ''; // Return _id if it exists, otherwise empty string
-      } catch (error) {
-        console.error('Error parsing user from sessionStorage:', error);
-        return '';
-      }
-    }
-    return '';
+    const parsedUser = this.getParsedUser();
+    return parsedUser?.id || '';
   }
 
   /**
@@ -61,17 +52,33 @@ export class AuthService {
    * @return {string} username or empty string if does not exist.
    */
   getUsername(): string {
+    const parsedUser = this.getParsedUser();
+    return parsedUser?.username || '';
+  }
+
+  /**
+   * Gets the isAdmin flag from session storage if it exists.
+   * @return {boolean} true if user is admin, false otherwise.
+   */
+  getIsAdmin(): boolean {
+    const parsedUser = this.getParsedUser();
+    return parsedUser?.isAdmin || false;
+  }
+
+    /**
+   * Helper to get the parsed user object from sessionStorage.
+   * @return {any | null} parsed user object or null if not found or invalid.
+   */
+  private getParsedUser(): any | null {
     const user = sessionStorage.getItem('user');
-    if (user) {
-      try {
-        const parsedUser = JSON.parse(user);
-        return parsedUser.username || ''; // Return username if it exists, otherwise empty string
-      } catch (error) {
-        console.error('Error parsing user from sessionStorage:', error);
-        return '';
-      }
+    if (!user) return null;
+
+    try {
+      return JSON.parse(user);
+    } catch (error) {
+      console.error('Error parsing user from sessionStorage:', error);
+      return null;
     }
-    return '';
   }
 
   /**
