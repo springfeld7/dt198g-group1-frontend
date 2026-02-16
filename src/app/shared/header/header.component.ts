@@ -9,7 +9,5 @@ import { MenuComponent } from './menu/menu.component';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
-  logout() {
-    alert("Loggar ut");
-  }
+  
 }
