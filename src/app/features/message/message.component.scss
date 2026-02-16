@@ -1,0 +1,36 @@
+/**
+ * Styles for the message component.
+ * Supports both global (top-of-page banner) and local (inline) placements.
+ * Success and error messages have distinct background colors.
+ */
+
+#message {
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+
+  &.success {
+    background-color: rgb(83, 178, 83); // green
+  }
+
+  &.error {
+    background-color: rgb(200, 89, 89); // red
+  }
+
+  /* Global banner: fixed at the top of the viewport */
+  &.global {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+  }
+
+  /* Local message: relative to parent container */
+  &.local {
+    position: absolute;
+    z-index: 10;
+  }
+}
