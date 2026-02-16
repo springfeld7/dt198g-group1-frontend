@@ -52,6 +52,13 @@ export class MessageService {
   }
 
   /**
+   * Displays a warning message.
+   */
+  showWarningMessage(message: string, autoCloseTime: number = 0) {
+    this.showMessage({ message, type: 'warning' }, autoCloseTime);
+  }
+
+  /**
    * Clears the current message manually.
    */
   clearMessage() {

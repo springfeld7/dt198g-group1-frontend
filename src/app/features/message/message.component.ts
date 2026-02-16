@@ -1,9 +1,18 @@
 import { Component, Input } from '@angular/core';
 import { MessageService } from '../../services/message.service';
 
+
 /**
- * Component for displaying user-facing messages (success or error).
- * Can appear either as a global banner or inline near the origin of the message.
+ * Component for displaying user-facing messages.
+ * Supports three types of messages: 
+ * - 'success': green, indicates a successful operation
+ * - 'error': red, indicates a failed operation
+ * - 'warning': yellow, indicates a caution or important notice
+ *
+ * Placement options:
+ * - 'global': top-of-page banner (fixed to viewport)
+ * - 'local': inline message positioned relative to parent container
+ *
  * Listens to the reactive `MessageService` signal.
  */
 @Component({

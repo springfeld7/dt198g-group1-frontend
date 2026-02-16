@@ -19,6 +19,10 @@
     background-color: rgb(200, 89, 89); // red
   }
 
+  &.warning {
+    background-color: rgb(250, 190, 60); // yellow
+  }
+
   /* Global banner: fixed at the top of the viewport */
   &.global {
     position: fixed;
