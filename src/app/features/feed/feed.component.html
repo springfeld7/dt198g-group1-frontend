@@ -1,10 +1,20 @@
 <div class="event-feed">
+  <div class="event-wrapper"
+       *ngFor="let event of (isAdmin ? eventList : futureEvents)">
+
+    <!-- Signed-up label for event -->
+    <span class="event-label"
+          *ngIf="isSignedUpFor(event.registeredMen, event.registeredWomen)">
+      Registered
+    </span>
+
+    <!-- Event -->
     <app-event
-        *ngFor="let event of (isAdmin ? eventList : futureEvents)"
-        [event]="event"
-        [ngClass]="{
-            'past-event': isAdmin && !futureEvents.includes(event)
-        }"
-    >
-    </app-event>
+      [event]="event"
+      [ngClass]="{
+        'past-event': isAdmin && !futureEvents.includes(event)
+      }"
+    ></app-event>
+
+  </div>
 </div>

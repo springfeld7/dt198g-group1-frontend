@@ -44,4 +44,17 @@ export class FeedComponent {
       });
     }
   }
+
+  /**
+   * Checks if the user has signed up for an event.
+   * @param registeredMen list with userId's of all signed up men
+   * @param registeredWomen list with userId's of all signed up women
+   * @returns true if this.userId is included in any of the lists
+   */
+  isSignedUpFor(registeredMen: string[], registeredWomen: string[]) : Boolean {
+    if (registeredMen.includes(this.userId) || registeredWomen.includes(this.userId)) {
+      return true;
+    }
+    return false;
+  }
 }
