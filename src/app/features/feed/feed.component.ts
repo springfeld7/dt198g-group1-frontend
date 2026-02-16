@@ -14,7 +14,7 @@ export class FeedComponent {
   private backendService = inject(BackendServiceService);
   eventList: Event[] = [];
   futureEvents: Event[] = [];
-  isLoggedIn = !!localStorage.getItem('userId');
+  isLoggedIn = !!localStorage.getItem('user');
   isAdmin: boolean = false;
   userId: string = "";
 
