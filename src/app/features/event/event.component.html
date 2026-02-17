@@ -1,1 +1,44 @@
-<p>event works!</p>
+<div class="event-card">
+
+  <!-- Event image placeholder -->
+  <div class="event-image">
+    <img src="event-placeholder.svg" alt="Event image">
+  </div>
+
+  <div class="event-content">
+
+    <!-- Title -->
+    <h2 class="event-title">{{ event.title }}</h2>
+
+    <!-- Date and location -->
+    <div class="event-meta">
+      <span class="event-date">{{ event.date | date:'mediumDate' }}</span>
+      <span class="event-location">{{ event.location }}</span>
+    </div>
+
+    <!-- Description -->
+    <p class="event-description">{{ event.description }}</p>
+
+    <!-- Available spots with icons -->
+    <div class="event-availability">
+      <span class="availability">
+        <img src="/women_icon.svg" class="gender-icon" alt="Women">
+        {{ registeredWomenCount }}/{{ maxPerGender }}
+      </span>
+
+      <span class="availability">
+        <img src="/men_icon.svg" class="gender-icon" alt="Men">
+        {{ registeredMenCount }}/{{ maxPerGender }}
+      </span>
+    </div>
+
+    <!-- Register / Unregister buttons -->
+    <div class="event-actions">
+      <button *ngIf="!isRegistered" (click)="onRegister()" [disabled]="isRegisterDisabled" [class.full]="isRegisterDisabled">
+        {{ isRegisterDisabled ? 'Full' : 'Register' }}
+      </button>
+      <button *ngIf="isRegistered" (click)="onUnregister()">Unregister</button>
+    </div>
+
+  </div>
+</div>
