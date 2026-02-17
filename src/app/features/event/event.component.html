@@ -34,7 +34,9 @@
 
     <!-- Register / Unregister buttons -->
     <div class="event-actions">
-      <button *ngIf="!isRegistered" (click)="onRegister()">Register</button>
+      <button *ngIf="!isRegistered" (click)="onRegister()" [disabled]="isRegisterDisabled" [class.full]="isRegisterDisabled">
+        {{ isRegisterDisabled ? 'Full' : 'Register' }}
+      </button>
       <button *ngIf="isRegistered" (click)="onUnregister()">Unregister</button>
     </div>
 
