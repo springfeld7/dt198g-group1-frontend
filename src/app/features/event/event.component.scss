@@ -1,0 +1,82 @@
+.event-card {
+    display: flex;
+    gap: 1rem;
+    background-color: #ffffff; // <-- change to white
+    border-radius: 12px;
+    padding: 1.5rem;
+    color: #1f1f1f; // dark text for contrast
+    flex-wrap: wrap; // responsive
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); // subtle shadow
+}
+
+.event-title {
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+    color: #1f1f1f; // dark text
+}
+
+.event-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    color: #5b21b6; // violet for date/location to match feed vibe
+}
+
+.event-description {
+    margin-bottom: 0.5rem;
+    color: #3c096c; // slightly darker violet text
+}
+
+.event-availability {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+
+    .gender-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 0.25rem;
+        vertical-align: middle;
+        filter: invert(29%) sepia(86%) saturate(457%) hue-rotate(252deg) brightness(92%) contrast(92%);
+        /* gives a violet tone to svg icons */
+    }
+
+    .availability {
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+        color: #1f1f1f; // readable on white
+    }
+}
+
+.event-actions button {
+    background-color: #7c3aed; // violet button
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.event-actions button:hover {
+    background-color: #5b21b6; // darker violet on hover
+}
+
+.event-image {
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.event-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+}
