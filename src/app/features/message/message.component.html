@@ -1,0 +1,8 @@
+<p
+  *ngIf="message()"
+  id="message"
+  [class]="message()?.type + ' ' + placement"
+  (click)="closeMessage()"
+>
+  {{ message()?.message }}
+</p>
