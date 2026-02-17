@@ -11,26 +11,12 @@ import { Event } from '../../models/event';
 })
 export class EventComponent {
 
-  //@Input() event!: Event;
+  @Input() event!: Event;
   @Input() isRegistered: boolean = false;
   @Input() userGender: 'man' | 'woman' | null = null;
 
   @Output() registerClicked = new EventEmitter<void>();
   @Output() unregisterClicked = new EventEmitter<void>();
-
-  event: Event = {
-  id: "1",
-  title: 'Valentine Speed Dating',
-  description: 'An evening of fun and fast-paced connections. Meet new people in a relaxed atmosphere.',
-  date: new Date('2026-03-14'),
-  location: 'Stockholm City Lounge',
-  maxSpots: 10, // 5 men + 5 women
-  registeredWomen: ['w1', 'w2', 'w3', 'w4', 'w5'], // FULL for women
-  registeredMen: ['m1', 'm2'], // 2/5 men
-  pairsFirstRound: [],
-  pairsSecondRound: [],
-  pairsThirdRound: []
-};
 
   /** Max spots per gender */
   get maxPerGender(): number {
