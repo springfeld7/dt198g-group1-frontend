@@ -17,6 +17,7 @@ export class FeedComponent {
   isLoggedIn = !!localStorage.getItem('user');
   isAdmin: boolean = false;
   userId: string = "";
+  userGender: 'man' | 'woman' | null = null;
 
   /**
    * Uses the backend service to fetch all events.
@@ -51,10 +52,45 @@ export class FeedComponent {
    * @param registeredWomen list with userId's of all signed up women
    * @returns true if this.userId is included in any of the lists
    */
-  isSignedUpFor(registeredMen: string[], registeredWomen: string[]) : Boolean {
-    if (registeredMen.includes(this.userId) || registeredWomen.includes(this.userId)) {
+  isSignedUpFor(registeredMen: string[], registeredWomen: string[]) : boolean {
+    if (this.userGender === 'man' && registeredMen.includes(this.userId)) {
       return true;
     }
+
+    if (this.userGender === 'woman' && registeredWomen.includes(this.userId)) {
+      return true;
+    }
+
     return false;
+  }
+
+  /**
+   * Registeres a user on an event after button click.
+   * @param event the clicked event.
+   */
+  onRegister(event: Event) {
+    this.backendService.registerUserForEvent(event.id, this.userId)
+    .then(() => {
+      if (this.userGender === 'man') {
+        event.registeredMen.push(this.userId);
+      } else if (this.userGender === 'woman') {
+        event.registeredWomen.push(this.userId);
+      }
+    });
+  }
+
+  /**
+   * Unregisteres a user from an event after button click.
+   * @param event the clicked event.
+   */
+  onUnregister(event: Event) {
+    this.backendService.unregisterUserFromEvent(event.id, this.userId)
+    .then(() => {    
+      if (this.userGender === 'man') {
+        event.registeredMen = event.registeredMen.filter(id => id !== this.userId);
+      } else if (this.userGender === 'woman') {
+        event.registeredWomen = event.registeredWomen.filter(id => id !== this.userId);
+      }
+    })
   }
 }

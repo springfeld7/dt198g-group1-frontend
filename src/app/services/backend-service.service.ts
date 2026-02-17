@@ -112,4 +112,25 @@ export class BackendServiceService {
 
     return await res.json()
   }
+
+  //TODO: Implement get user by id
+  async getUserById(id: string) : Promise<User> {
+    const res = await fetch('');
+
+    return await res.json()
+  }
+
+  //TODO: Implement registration of user for an event
+  async registerUserForEvent(eventId: string, userId: string) : Promise<any> {
+    const res = await fetch('');
+
+    return await res.json()
+  }
+
+  //TODO: Implement UNregistration of user from an event
+  async unregisterUserFromEvent(eventId: string, userId: string) : Promise<any> {
+    const res = await fetch('');
+
+    return await res.json()
+  }
 }

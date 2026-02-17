@@ -19,18 +19,24 @@
 }
 
 .past-event {
-    filter: grayscale(60%);
+    filter: grayscale(90%) opacity(75%);
 }
 
 .event-label {
     position: absolute;
-    top: 6px;
-    right: 6px;
-    background: #ffffff;
-    color: rgb(0, 151, 20);
-    padding: 2px 4px;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    font-weight: bold;
+    top: 8pt;
+    left: 46pt;
+    background: #7c3aed;
+    color: #ffffff;
+    padding: 2pt 4pt;
+    border-radius: 6pt;
+    font-size: 0.85rem;
+    // font-weight: bold;
     z-index: 10;
+}
+
+.registered-check {
+    width: 14pt;
+    margin-top: 0.5pt;
+    margin-bottom: -2.5pt;
 }
