@@ -1,1 +1,24 @@
-<p>feed works!</p>
+<div class="event-feed">
+  <div class="event-wrapper"
+       *ngFor="let event of (isAdmin ? eventList : futureEvents)">
+
+    <!-- Signed-up label for event -->
+    <span class="event-label" 
+      *ngIf="isSignedUpFor(event.registeredMen, event.registeredWomen)">
+      Registered <img src="/checkmark.svg" class="registered-check">
+    </span>
+
+    <!-- Event -->
+    <app-event
+      [event]="event"
+      [isRegistered]="isSignedUpFor(event.registeredMen, event.registeredWomen)"
+      [userGender]="userGender"
+      [ngClass]="{
+        'past-event': isAdmin && !futureEvents.includes(event)
+      }"
+      (registerClicked)="onRegister(event)"
+      (unregisterClicked)="onUnregister(event)">
+    </app-event>
+
+  </div>
+</div>

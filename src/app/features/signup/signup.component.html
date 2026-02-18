@@ -1,1 +1,46 @@
-<p>signup works!</p>
+<form #signupform="ngForm" (ngSubmit)="submit()">
+    <label for="username">Username [a-zA-Z0-9](3,32)</label>
+    <input #username="ngModel" id="username" name="username" pattern="[a-zA-Z0-9]{3,32}" type="text" [(ngModel)]="newUser.username" placeholder="Username" required [class.invalid]="username.value && username.invalid">
+
+    <label for="password">Password .(8,)</label>
+    <input #password="ngModel" id="password" name="password" type="password" [(ngModel)]="newUser.password" minlength="8" placeholder="Password" required [class.invalid]="password.value && password.invalid">
+
+    <label for="repeatPassword">Repeat password</label>
+    <input id="repeatPassword" name="repeatPassword" type="password" [(ngModel)]="newUser.repeatPassword" placeholder="Repeat password" required [class.invalid]="newUser.repeatPassword && newUser.repeatPassword !== newUser.password">
+
+    <label for="firstName">First name [a-zA-Z0-9](1,64)</label>
+    <input #firstName="ngModel" id="firstName" name="firstName" pattern="[a-zA-Z0-9]{1,64}" type="text" [(ngModel)]="newUser.firstName" placeholder="First name" required [class.invalid]="firstName.value && firstName.invalid">
+
+    <label for="surname">Surname [a-zA-Z0-9](1,64)</label>
+    <input #surname="ngModel" id="surname" name="surname" pattern="[a-zA-Z0-9]{1,64}" type="text" [(ngModel)]="newUser.surname" placeholder="Surname" required [class.invalid]="surname.value && surname.invalid">
+
+    <label for="email">Email</label>
+    <input #email="ngModel" id="email" name="email" pattern="[a-zA-Z0-9._+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z.\-]{2,}" type="text" [(ngModel)]="newUser.email" placeholder="Email" required [class.invalid]="email.value && email.invalid">
+
+    <label for="phone">Phone .(1,32)</label>
+    <input #phone="ngModel" id="phone" name="phone" maxlength="32" type="text" [(ngModel)]="newUser.phone" placeholder="Phone" required [class.invalid]="phone.value && phone.invalid">
+
+    <label for="location">Location .(1,128)</label>
+    <input #location="ngModel" id="location" name="location" maxlenght="128" type="text" [(ngModel)]="newUser.location" placeholder="Location" required [class.invalid]="location.value && location.invalid">
+
+    <label for="gender">Gender</label>
+    <label for="genderWoman" class="labelForRadio">
+        <input id="genderWoman" name="gender" type="radio" [(ngModel)]="newUser.gender" required value="woman">
+        Woman
+    </label>
+    <label for="genderMan" class="labelForRadio">
+        <input id="genderMan" name="gender" type="radio" [(ngModel)]="newUser.gender" required value="man">
+        Man
+    </label>
+    
+    <label for="age">Age 0-150</label>
+    <input #age="ngModel" id="age" name="age" max="150" min="0" type="number" [(ngModel)]="newUser.age" placeholder="Age" required step="1" [class.invalid]="age.value && age.invalid">
+    
+    <label for="interests">Interests (select 5)</label>
+    <label class="labelForCheckbox" *ngFor="let interest of interests">
+        <input type="checkbox" [value]="interest._id" (change)="onInterestChange($event, interest._id)" [checked]="newUser.interests.includes(interest._id)"/> {{ interest.name }}
+    </label>
+    <div class="error invalid" [class.hide]="!errorMessage">{{ errorMessage }}</div>
+    
+    <button [disabled]="signupform.invalid || newUser.password !== newUser.repeatPassword || newUser.interests.length !== maxInterests">Submit</button>
+</form>
