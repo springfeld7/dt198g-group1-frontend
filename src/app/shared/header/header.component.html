@@ -13,7 +13,7 @@
   </div>
   
   <div class="header-right">
-     <!-- <a routerLink="/login">Login</a> -->
-    <app-menu></app-menu>
+    <a *ngIf="!isLoggedIn" routerLink="/login" class="login-link">Login</a>
+    <app-menu *ngIf="isLoggedIn"></app-menu>
   </div>
 </div>
