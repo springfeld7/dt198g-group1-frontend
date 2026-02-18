@@ -1,5 +1,5 @@
 export interface Review {
-    id: string;
+    _id: string;
     reviewer: string;
     eventId: string;
     round: number;

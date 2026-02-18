@@ -1,7 +1,7 @@
 import { Interest } from "./interest";
 
 export interface User {
-    id: string;
+    _id: string;
     username: string;
     isAdmin: boolean;
     firstName?: string;
@@ -13,4 +13,5 @@ export interface User {
     age?: number;
     interests?: Interest[];
     matches?: string[];
+    img?: string;
 }
