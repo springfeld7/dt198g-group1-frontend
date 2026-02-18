@@ -1,7 +1,7 @@
 import { User } from './user';
 
 export interface Event<T extends string | User = string> {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   date: Date;
@@ -12,4 +12,5 @@ export interface Event<T extends string | User = string> {
   pairsFirstRound: [T, T][];
   pairsSecondRound: [T, T][];
   pairsThirdRound: [T, T][];
+  img?: string;
 }
