@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BackendServiceService } from '../../services/backend-service.service';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  private backendService = inject(BackendServiceService);
+  private authService = inject(AuthService);
   private router = inject(Router);
 
   username: string = "";
@@ -18,7 +18,7 @@ export class LoginComponent {
   errorMessage: string = "";
 
   submit(): void {
-    this.backendService.loginUser(this.username, this.password).then(
+    this.authService.login(this.username, this.password).then(
       (response) => {
         this.errorMessage = "";
         this.router.navigate(["/"]);

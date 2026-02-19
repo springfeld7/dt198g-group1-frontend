@@ -101,7 +101,7 @@ export class AuthService {
       const response = await this.backend.login(username, password);
 
       const user: User = {
-        id: response.user.userId,
+        _id: response.user.userId,
         username: response.user.username,
         isAdmin: response.user.isAdmin
       };
@@ -124,6 +124,7 @@ export class AuthService {
       }
       this.messageService.showErrorMessage(msg, 0);
       console.error('Error while logging in:', error);
+      throw error;
     }
   }
 
