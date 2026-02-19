@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { User } from '../../models/user';
 import { CommonModule } from '@angular/common';
 import { Interest } from '../../models/interest';
-import { BackendServiceService } from '../../services/backend-service.service';
+import { BackendService } from '../../services/backend.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   styleUrl: './signup.component.scss',
 })
 export class SignupComponent {
-  private backendService = inject(BackendServiceService);
+  private backendService = inject(BackendService);
   private router = inject(Router);
 
   newUser = {
