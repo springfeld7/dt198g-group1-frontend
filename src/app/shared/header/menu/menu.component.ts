@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-menu',
@@ -10,6 +11,7 @@ import { RouterLink } from '@angular/router';
 })
 export class MenuComponent {
   isOpen = false;
+  authService: AuthService = inject(AuthService);
 
   toggleMenu() {
     this.isOpen = !this.isOpen;
@@ -20,6 +22,7 @@ export class MenuComponent {
   }
 
   logout() {
-    alert("Loggar ut");
+    this.authService.logout();
+    this.closeMenu();
   }
 }
