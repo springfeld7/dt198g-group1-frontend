@@ -8,6 +8,7 @@ import { Question } from '../models/question';
 import { Review } from '../models/review';
 import { User } from '../models/user';
 import { LoginResponse } from '../models/login-response';
+import { RegistrationResponse } from '../models/reg-response';
 import { UserRegistration } from '../models/user-registration';
 
 @Injectable({
@@ -77,11 +78,11 @@ export class BackendService {
 	 * @param {UserRegistration} user - The user registration object containing registration details.
 	 * @returns {Promise<User>} A Promise resolving to the created user.
 	 */
-	registerUser(user: UserRegistration): Promise<User> {
+	registerUser(user: UserRegistration): Promise<RegistrationResponse> {
 		const endpoint = `${this.URL}/auth/register`;
 
 		return firstValueFrom(
-			this.http.post<User>(endpoint, user, this.httpOptions)
+			this.http.post<RegistrationResponse>(endpoint, user, this.httpOptions)
 		);
 	}
 
