@@ -42,11 +42,7 @@ export class SignupComponent {
         this.errorMessage = "";
       },
       (error) => {
-        if (error instanceof Error) {
-          this.errorMessage = error.message;
-        } else {
-          this.errorMessage = "An unknown error occured";
-        }
+        this.errorMessage = error.error.error;
       }
     );
   }
@@ -55,21 +51,17 @@ export class SignupComponent {
     this.backendService.registerUser(this.newUser).then(
       (response) => {
         this.errorMessage = "";
-        this.backendService.login(response.username, this.newUser.password).then(
-          (userData) => {
+        this.backendService.login(response.user.username, this.newUser.password).then(
+          (_) => {
             this.router.navigate(["/"]);
           },
           (error) => {
-            this.errorMessage = "Invalid credentials.";
+            this.errorMessage = error.error.error;
           }
         )
       },
       (error) => {
-        if (error instanceof Error) {
-          this.errorMessage = error.message;
-        } else {
-          this.errorMessage = "An unknown error occured.";
-        }
+        this.errorMessage = error.error.error;
       }
     );
   }
