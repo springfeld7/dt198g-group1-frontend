@@ -19,12 +19,12 @@ export class LoginComponent {
 
   submit(): void {
     this.authService.login(this.username, this.password).then(
-      (response) => {
+      (_) => {
         this.errorMessage = "";
         this.router.navigate(["/"]);
       },
       (error) => {
-        this.errorMessage = error.message;
+        this.errorMessage = error.error.error;
       }
     )
   }

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { EventComponent } from '../event/event.component';
 import { BackendService } from '../../services/backend.service';
 import { AuthService } from '../../services/auth.service';
-import { Event } from '../../models/event';
+import type { Event } from '../../models/event';
 
 @Component({
   selector: 'app-feed',
@@ -46,53 +46,52 @@ export class FeedComponent {
         this.futureEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
       });
   }
-}
 
-/**
- * Checks if the user has signed up for an event.
- * @param registeredMen list with userId's of all signed up men
- * @param registeredWomen list with userId's of all signed up women
- * @returns true if this.userId is included in any of the lists
- */
-isSignedUpFor(registeredMen: string[], registeredWomen: string[]) : boolean {
-  if (this.userGender === 'man' && registeredMen.includes(this.userId)) {
-    return true;
+  /**
+   * Checks if the user has signed up for an event.
+   * @param registeredMen list with userId's of all signed up men
+   * @param registeredWomen list with userId's of all signed up women
+   * @returns true if this.userId is included in any of the lists
+   */
+  isSignedUpFor(registeredMen: string[], registeredWomen: string[]): boolean {
+    if (this.userGender === 'man' && registeredMen.includes(this.userId)) {
+      return true;
+    }
+
+    if (this.userGender === 'woman' && registeredWomen.includes(this.userId)) {
+      return true;
+    }
+
+    return false;
   }
 
-  if (this.userGender === 'woman' && registeredWomen.includes(this.userId)) {
-    return true;
+  /**
+   * Registeres a user on an event after button click.
+   * @param event the clicked event.
+   */
+  onRegister(event: Event) {
+    this.backendService.registerUserForEvent(event._id)
+      .then(() => {
+        if (this.userGender === 'man') {
+          event.registeredMen.push(this.userId);
+        } else if (this.userGender === 'woman') {
+          event.registeredWomen.push(this.userId);
+        }
+      });
   }
 
-  return false;
-}
-
-/**
- * Registeres a user on an event after button click.
- * @param event the clicked event.
- */
-onRegister(event: Event) {
-  this.backendService.registerUserForEvent(event._id)
-    .then(() => {
-      if (this.userGender === 'man') {
-        event.registeredMen.push(this.userId);
-      } else if (this.userGender === 'woman') {
-        event.registeredWomen.push(this.userId);
-      }
-    });
-}
-
-/**
- * Unregisteres a user from an event after button click.
- * @param event the clicked event.
- */
-onUnregister(event: Event) {
-  this.backendService.unregisterUserFromEvent(event._id)
-    .then(() => {
-      if (this.userGender === 'man') {
-        event.registeredMen = event.registeredMen.filter(id => id !== this.userId);
-      } else if (this.userGender === 'woman') {
-        event.registeredWomen = event.registeredWomen.filter(id => id !== this.userId);
-      }
-    })
-}
+  /**
+   * Unregisteres a user from an event after button click.
+   * @param event the clicked event.
+   */
+  onUnregister(event: Event) {
+    this.backendService.unregisterUserFromEvent(event._id)
+      .then(() => {
+        if (this.userGender === 'man') {
+          event.registeredMen = event.registeredMen.filter(id => id !== this.userId);
+        } else if (this.userGender === 'woman') {
+          event.registeredWomen = event.registeredWomen.filter(id => id !== this.userId);
+        }
+      })
+  }
 }
