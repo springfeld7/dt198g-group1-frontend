@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { User } from '../../models/user';
+import { UserRegistration } from '../../models/user-registration';
 import { CommonModule } from '@angular/common';
 import { Interest } from '../../models/interest';
 import { BackendService } from '../../services/backend.service';
@@ -17,13 +17,13 @@ export class SignupComponent {
   private backendService = inject(BackendService);
   private router = inject(Router);
 
-  newUser = {
+  newUser: UserRegistration = {
     username: "username",
     password: "password",
     repeatPassword: "password",
     firstName: "firstname",
     surname: "surname",
-    email: "email@email.email",
+    email: "your@email.com",
     phone: "phone",
     location: "location",
     gender: "woman",
@@ -35,8 +35,6 @@ export class SignupComponent {
   errorMessage: string = "";
   maxInterests = 5;
 
-
-
   ngOnInit() {
     this.backendService.getAllInterests().then(
       (response) => {
@@ -44,11 +42,7 @@ export class SignupComponent {
         this.errorMessage = "";
       },
       (error) => {
-        if (error instanceof Error) {
-          this.errorMessage = error.message;
-        } else {
-          this.errorMessage = "An unknown error occured";
-        }
+        this.errorMessage = error.error.error;
       }
     );
   }
@@ -57,21 +51,17 @@ export class SignupComponent {
     this.backendService.registerUser(this.newUser).then(
       (response) => {
         this.errorMessage = "";
-        this.backendService.loginUser(response.user.username, this.newUser.password).then(
-          (userData) => {
+        this.backendService.login(response.user.username, this.newUser.password).then(
+          (_) => {
             this.router.navigate(["/"]);
           },
           (error) => {
-            this.errorMessage = "Invalid credentials.";
+            this.errorMessage = error.error.error;
           }
         )
       },
       (error) => {
-        if (error instanceof Error) {
-          this.errorMessage = error.message;
-        } else {
-          this.errorMessage = "An unknown error occured.";
-        }
+        this.errorMessage = error.error.error;
       }
     );
   }

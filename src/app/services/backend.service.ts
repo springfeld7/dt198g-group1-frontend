@@ -8,6 +8,8 @@ import { Question } from '../models/question';
 import { Review } from '../models/review';
 import { User } from '../models/user';
 import { LoginResponse } from '../models/login-response';
+import { RegistrationResponse } from '../models/reg-response';
+import { UserRegistration } from '../models/user-registration';
 
 @Injectable({
 	providedIn: 'root'
@@ -71,6 +73,20 @@ export class BackendService {
 	// ===============================================================
 
 	/**
+	 * Registers a new user.
+	 *
+	 * @param {UserRegistration} user - The user registration object containing registration details.
+	 * @returns {Promise<User>} A Promise resolving to the created user.
+	 */
+	registerUser(user: UserRegistration): Promise<RegistrationResponse> {
+		const endpoint = `${this.URL}/auth/register`;
+
+		return firstValueFrom(
+			this.http.post<RegistrationResponse>(endpoint, user, this.httpOptions)
+		);
+	}
+
+	/**
 	 * Get a single user by ID.
 	 *
 	 * @param id - User's unique identifier.
@@ -129,4 +145,17 @@ export class BackendService {
 	// ===============================================================
 	// INTEREST METHODS
 	// ===============================================================
+
+	/**
+	  * Get all interests from the REST API.
+	  *
+	  * @returns {Promise<Interest[]>} A Promise that resolves to an array of interests.
+	  */
+	getAllInterests(): Promise<Interest[]> {
+		const endpoint = `${this.URL}/interests`;
+
+		return firstValueFrom(
+			this.http.get<Interest[]>(endpoint, this.httpOptions)
+		);
+	}
 }
