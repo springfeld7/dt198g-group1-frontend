@@ -4,6 +4,7 @@ import { UserRegistration } from '../../models/user-registration';
 import { CommonModule } from '@angular/common';
 import { Interest } from '../../models/interest';
 import { BackendService } from '../../services/backend.service';
+import { MessageService } from '../../services/message.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,6 +16,7 @@ import { Router } from '@angular/router';
 })
 export class SignupComponent {
   private backendService = inject(BackendService);
+  private messageService = inject(MessageService);
   private router = inject(Router);
 
   newUser: UserRegistration = {
@@ -36,34 +38,32 @@ export class SignupComponent {
   maxInterests = 5;
 
   ngOnInit() {
-    this.backendService.getAllInterests().then(
-      (response) => {
+    this.backendService.getAllInterests()
+      .then((response) => {
         this.interests = response;
-        this.errorMessage = "";
-      },
-      (error) => {
-        this.errorMessage = error.error.error;
-      }
-    );
+      })
+      .catch((err) => {
+        this.messageService.showErrorMessage(`Could not load interests: ${err.message}`, 5);
+      });
   }
 
   submit(): void {
-    this.backendService.registerUser(this.newUser).then(
-      (response) => {
-        this.errorMessage = "";
-        this.backendService.login(response.user.username, this.newUser.password).then(
-          (_) => {
+    this.messageService.clearMessage();
+
+    this.backendService.registerUser(this.newUser)
+      .then((response) => {
+        this.backendService.login(response.user.username, this.newUser.password)
+          .then(() => {
+            this.messageService.showSuccessMessage("Account created successfully! Welcome.", 3);
             this.router.navigate(["/"]);
-          },
-          (error) => {
-            this.errorMessage = error.error.error;
-          }
-        )
-      },
-      (error) => {
-        this.errorMessage = error.error.error;
-      }
-    );
+          })
+          .catch((err) => {
+            this.messageService.showErrorMessage(`Login failed: ${err.message}`, 5);
+          });
+      })
+      .catch((err) => {
+        this.messageService.showErrorMessage(`Registration failed: ${err.message}`, 5);
+      });
   }
 
   onInterestChange(event: Event, id: string): void {
