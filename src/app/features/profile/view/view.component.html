@@ -1,3 +1,29 @@
-<p>profile/view works!</p>
+<div class="info-container">
+    <div class="pic-container">
+        <img
+            [src]="imageSrc"
+            [hidden]="!isLoaded"
+        />
 
-<a routerLink="/profile/edit">Edit profile</a>
+        <!-- Placeholder shown until image loads -->
+            <img class="placeholder"
+            *ngIf="!isLoaded"
+            [src]="placeholderSrc"
+        />
+    </div>
+    <div>
+        <label for="fname">First name:</label>
+        <label for="lname">Last name:</label>
+        <label for="age">Age:</label>
+        <label for="pnumber">Phone number:</label>
+        <label for="email">E-mail:</label>
+        <label for="description">Description:</label>
+        <label for="Interests">Interests:</label>
+    </div>
+</div>
+
+<div>
+    <button>
+        Edit
+    </button>
+</div>
