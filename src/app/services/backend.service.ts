@@ -7,9 +7,11 @@ import { Interest } from '../models/interest';
 import { Question } from '../models/question';
 import { Review } from '../models/review';
 import { User } from '../models/user';
-import { LoginResponse } from '../models/login-response';
-import { RegistrationResponse } from '../models/reg-response';
-import { UserRegistration } from '../models/user-registration';
+import { LoginResponse } from '../models/api/login-response.dto';
+import { RegistrationResponse } from '../models/api/reg-response.dto';
+import { UserRegistration } from '../models/api/user-registration.dto';
+import { DeleteEventResponse } from '../models/api/delete-event-response.dto';
+import { UserUpdateData } from '../models/api/user-update.dto';
 
 @Injectable({
 	providedIn: 'root'
@@ -30,7 +32,7 @@ export class BackendService {
 	constructor(private http: HttpClient) { }
 
 	// ===============================================================
-	// AUTHENTICATION METHODS
+	// AUTHENTICATION AND REGISTRATION METHODS
 	// ===============================================================
 
 	/**
@@ -68,10 +70,6 @@ export class BackendService {
 		return firstValueFrom(responseObservable);
 	}
 
-	// ===============================================================
-	// USER METHODS
-	// ===============================================================
-
 	/**
 	 * Registers a new user.
 	 *
@@ -86,6 +84,10 @@ export class BackendService {
 		);
 	}
 
+	// ===============================================================
+	// USER METHODS
+	// ===============================================================
+
 	/**
 	 * Get a single user by ID.
 	 *
@@ -95,6 +97,40 @@ export class BackendService {
 	getUserById(id: string): Promise<User> {
 		const endpoint = `${this.URL}/users/${id}`;
 		return firstValueFrom(this.http.get<User>(endpoint, this.httpOptions));
+	}
+
+	/**
+	 * Retrieves all users from the database.
+	 * 
+	 * @returns {Promise<User[]>} A Promise resolving to an array of User objects.
+	 */
+	getAllUsers(): Promise<User[]> {
+		const endpoint = `${this.URL}/users`;
+
+		return firstValueFrom(this.http.get<User[]>(endpoint, this.httpOptions));
+	}
+
+	/**
+	 * Updates a user's profile.
+	 *
+	 * @param {UserUpdateData} userData - Any combination of user profile fields.
+	 */
+	updateUser(userData: UserUpdateData): Promise<User> {
+		return firstValueFrom(this.http.put<User>(`${this.URL}/users`, userData, this.httpOptions));
+	}
+
+	/**
+	 * Retrieves all matches for a specific user.
+	 * 
+	 * @param {string} id - The User ID to find matches for.
+	 * @returns {Promise<User[]>} A Promise resolving to an array of matched User objects.
+	 */
+	getUserMatches(id: string): Promise<User[]> {
+		const endpoint = `${this.URL}/users/${id}/matches`;
+
+		return firstValueFrom(
+			this.http.get<User[]>(endpoint, this.httpOptions)
+		);
 	}
 
 	// ===============================================================
@@ -113,10 +149,25 @@ export class BackendService {
 		return firstValueFrom(responseObservable).then(events =>
 			events.map(event => ({
 				...event,
-				id: event._id,
 				date: new Date(event.date)
 			}))
 		);
+	}
+
+	/**
+	 * Retrieves a specific event from the database by id.
+	 *
+	 * @param {string} id - The unique id of the event to retrieve.
+	 * @returns {Promise<Event>} A Promise that resolves to the Event object.
+	 */
+	getEventById(id: string): Promise<Event> {
+		const endpoint = `${this.URL}/events/${id}`;
+
+		return firstValueFrom(this.http.get<Event>(endpoint, this.httpOptions)
+		).then(event => ({
+			...event,
+			date: new Date(event.date)
+		}));
 	}
 
 	/**
@@ -141,6 +192,55 @@ export class BackendService {
 		return firstValueFrom(this.http.delete<Event>(endpoint, this.httpOptions));
 	}
 
+	/**
+	 * Posts a new event to the database.
+	 * 
+	 * @param {Partial<Event>} eventData - Object containing title, description, date, location, and maxSpots.
+	 * @returns {Promise<Event>} A Promise resolving to the newly created event.
+	 */
+	createEvent(eventData: Partial<Event>): Promise<Event> {
+		const endpoint = `${this.URL}/events`;
+
+		return firstValueFrom(this.http.post<Event>(endpoint, eventData, this.httpOptions)
+		).then(event => ({
+			...event,
+			date: new Date(event.date)
+		}));
+	}
+
+	/**
+	 * Updates an existing event in the database.
+	 * 
+	 * @param {string} id - The unique ID of the event to update.
+	 * @param {Partial<Event>} updates - The fields to update.
+	 * @returns {Promise<Event>} A Promise resolving to the updated event.
+	 */
+	updateEvent(id: string, updates: Partial<Event>): Promise<Event> {
+		const endpoint = `${this.URL}/events/${id}`;
+
+		return firstValueFrom(this.http.put<Event>(endpoint, updates, this.httpOptions)
+		).then(event => ({
+			...event,
+			date: new Date(event.date)
+		}));
+	}
+
+	/**
+	 * Deletes an event from the database (Admin only).
+	 * @param {string} id - The unique ID of the event to delete.
+	 * @returns {Promise<DeleteEventResponse>} A Promise resolving to the deletion message and the deleted event data.
+	 */
+	deleteEvent(id: string): Promise<DeleteEventResponse> {
+		const endpoint = `${this.URL}/events/${id}`;
+
+		return firstValueFrom(this.http.delete<DeleteEventResponse>(endpoint, this.httpOptions));
+	}
+
+	// ===============================================================
+	// REVIEW METHODS
+	// ===============================================================
+
+
 
 	// ===============================================================
 	// INTEREST METHODS
@@ -157,5 +257,49 @@ export class BackendService {
 		return firstValueFrom(
 			this.http.get<Interest[]>(endpoint, this.httpOptions)
 		);
+	}
+
+	// ===============================================================
+	// QUESTION METHODS
+	// ===============================================================
+
+	/**
+	 * Fetches all registration questions from the database.
+	 *
+	 * * @returns {Promise<Question[]>} A Promise resolving to an array of questions.
+	 */
+	getAllQuestions(): Promise<Question[]> {
+		const endpoint = `${this.URL}/questions`;
+
+		return firstValueFrom(
+			this.http.get<Question[]>(endpoint, this.httpOptions)
+		);
+	}
+
+	// ===============================================================
+	// IMAGE URL METHODS
+	// ===============================================================
+
+	/**
+	 * Internal helper to build resource URLs
+	 * @param type - 'users' | 'events'
+	 * @param id - The resource ID
+	 */
+	private getPictureUrl(type: 'users' | 'events', id: string): string {
+		return `${this.URL}/${type}/${id}/pictures`;
+	}
+
+	/**
+	 * Public method for User pictures
+	 */
+	getUserPictureUrl(id: string): string {
+		return this.getPictureUrl('users', id);
+	}
+
+	/**
+	 * Public method for Event pictures
+	 */
+	getEventPictureUrl(id: string): string {
+		return this.getPictureUrl('events', id);
 	}
 }
