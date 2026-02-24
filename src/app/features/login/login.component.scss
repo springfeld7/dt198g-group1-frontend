@@ -1,32 +1,18 @@
 form {
     text-align: center;
 
-    label {
-        display: block;
-        margin-top: 20px;
-        
-        :first-child {
-            margin-top: 0;
-        }
-    }
-
-    input {
-        border-radius: 10px;
-        padding: 12px 18px;
-    }
-
     button {
         display: block;
-        margin: 20px auto;
+        margin: 20pt auto;
     }
 }
 
 .invalid {
     background-color: pink;
     border-color: red;
-    border-radius: 10px;
+    border-radius: 10pt;
     display: inline-block;
-    padding: 12px 18px;
+    padding: 12pt 18pt;
 }
 
 .hide {
