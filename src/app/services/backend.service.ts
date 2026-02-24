@@ -134,10 +134,10 @@ export class BackendService {
 	}
 
 	/**
-	 * Removes a match relationship between the current user and a matched user.
+	 * Removes a match between the current user and a matched user.
 	 *
 	 * @param {string} matchId - The ID of the user to be removed from matches.
-	 * @returns {Promise<any>} A promise resolving to the server response (e.g., RemoveMatchResponseDto).
+	 * @returns {Promise<any>} A promise resolving to the server response.
 	 */
 	removeMatch(matchId: string): Promise<any> {
 		const endpoint = `${this.URL}/users/matches/${matchId}`;
