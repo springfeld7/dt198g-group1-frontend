@@ -1,4 +1,4 @@
-<div class="menu-wrapper">
+<div>
   <button 
     class="hamburger" 
     [class.is-active]="isOpen"
@@ -12,9 +12,17 @@
   </button>
   
   <div class="menu-dropdown" *ngIf="isOpen">
-    <a routerLink="/profile" class="menu-item" (click)="closeMenu()">Profile</a>
-    <a routerLink="/events" class="menu-item" (click)="closeMenu()">Events</a>
-    <a routerLink="/matches" class="menu-item" (click)="closeMenu()">Matches</a>
-    <a class="menu-item" (click)="logout()">Sign out</a>
+    <a routerLink="/profile" class="menu-item" (click)="closeMenu()">
+      <img class="icon" src="/profile-circle.svg" />Profile
+    </a>
+    <a routerLink="/events" class="menu-item" (click)="closeMenu()">
+      <img class="icon" src="/calendar.svg" />Events
+    </a>
+    <a routerLink="/matches" class="menu-item" (click)="closeMenu()">
+      <img class="icon" src="/heart.svg" />Matches
+    </a>
+    <a class="menu-item" (click)="logout()">
+      <img class="icon" src="/logout.svg" />Log out
+    </a>
   </div>
 </div>

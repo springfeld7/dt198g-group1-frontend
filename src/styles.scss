@@ -3,7 +3,80 @@
     padding: 0;
 }
 
-html, body {
+html {
     height: 100vh;
     width: 100vw;
+    background-image: url("/heart-bg.png");
+    background-size: cover;
+    background-color: rgba(255, 255, 255, 0.5);
+    background-blend-mode: overlay;
+    background-attachment: fixed;
+}
+
+.header-container {
+    position: absolute;
+    min-width: min-content;
+    width: 100vw;
+    height: fit-content;
+    left: 0;
+    top: 18pt;
+    background: rgb(255, 255, 255);
+    border-bottom: 1pt solid rgb(231, 231, 231);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+}
+
+.icon {
+    height: 35pt;
+    width: 35pt;
+}
+
+.logo {
+  width: 250pt;
+  padding-top: 2pt;
+}
+
+body {
+    margin: 0 auto;
+    margin-top: 80pt;
+    height: 100vh;
+    min-height: min-content;
+    max-height: max-content;
+    width: 80vw;
+    max-width: 800pt;
+    min-width: max-content;
+    padding: 10pt;
+    overflow: auto;
+    background-color: rgba(211, 211, 211, 0.3);
+}
+
+label:first-child {
+    margin-top: 0;
+}
+
+label {
+    display: block;
+    margin-top: 16pt;
+    font-size: clamp(10pt, 2vw, 14pt);
+}
+
+input {
+    height: clamp(18pt, 4vw, 25pt);
+    border-radius: 10pt;
+    padding: 0 5pt;
+}
+
+button {
+    font-size: clamp(9pt, 2vw, 12pt);
+    border-radius: 9pt;
+    padding: 5pt 10pt;
+    background-color: #659DF2;
+    border: #305BAB solid 2pt;
+    color: white;
+}
+
+button:hover {
+    background-color: #89b1ee;
+    cursor: pointer;
 }
