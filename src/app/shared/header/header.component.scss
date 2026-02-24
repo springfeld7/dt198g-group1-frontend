@@ -45,3 +45,30 @@ a {
     cursor: pointer;
   }
 }
+
+.logo {
+  cursor: grab;
+  transition: transform 120ms ease;
+  transform-origin: center;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:active {
+    cursor: grabbing;
+    animation: grab-squeeze 200ms ease-out 1;
+  }
+}
+
+@keyframes grab-squeeze {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.92, 1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

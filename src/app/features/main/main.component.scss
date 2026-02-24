@@ -1,0 +1,47 @@
+.mainInfoTextContainer {
+	display: flex;
+	justify-content: center;
+	padding: 60px 20px;
+}
+
+.mainInfoTextCard {
+	max-width: 720px;
+	padding: 28px 32px;
+	background: linear-gradient(135deg, #ffe1ef 0%, #fff6dc 100%);
+	border: 2px solid #111;
+	border-radius: 16px;
+	box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+	text-align: center;
+}
+
+.mainInfoTitle {
+	margin: 0 0 8px;
+	font-size: 32px;
+	letter-spacing: 1px;
+}
+
+.mainInfoLead {
+	margin: 0 0 10px;
+	font-size: 18px;
+	font-weight: 600;
+}
+
+.mainInfoBody {
+	margin: 0;
+	font-size: 16px;
+	line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+	.mainInfoTextCard {
+		padding: 22px 18px;
+	}
+
+	.mainInfoTitle {
+		font-size: 26px;
+	}
+
+	.mainInfoLead {
+		font-size: 16px;
+	}
+}
