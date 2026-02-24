@@ -26,7 +26,7 @@
   /* Global banner: fixed at the top of the viewport */
   &.global {
     position: fixed;
-    top: 0;
+    top: 48px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;

@@ -65,10 +65,10 @@ export class AuthService {
     return parsedUser?.isAdmin || false;
   }
 
-    /**
-   * Helper to get the parsed user object from sessionStorage.
-   * @return {any | null} parsed user object or null if not found or invalid.
-   */
+  /**
+ * Helper to get the parsed user object from sessionStorage.
+ * @return {any | null} parsed user object or null if not found or invalid.
+ */
   private getParsedUser(): any | null {
     const user = sessionStorage.getItem('user');
     if (!user) return null;
@@ -106,24 +106,15 @@ export class AuthService {
         isAdmin: response.user.isAdmin
       };
 
-      // Store user information in session storage
       sessionStorage.setItem('user', JSON.stringify(user));
+      this.isLoggedInSubject.next(true);
 
-      // Update logged-in status
-      this.isLoggedInSubject.next(this.isLoggedIn());
 
-      //Show success message
       this.messageService.showSuccessMessage(`Welcome ${this.getUsername()}! You have successfully logged in.`, 5);
 
     } catch (error) {
 
-      let msg = 'An unexpected error occurred'; //Fallback message
-
-      if (error instanceof HttpErrorResponse) {
-        msg = error.error?.error || error.message || msg;
-      }
-      this.messageService.showErrorMessage(msg, 0);
-      console.error('Error while logging in:', error);
+      console.error('Login failed in AuthService:', error);
       throw error;
     }
   }
@@ -132,21 +123,23 @@ export class AuthService {
    * Logs out the user. Clears session storage, updates login status,
    * redirects to the main page, and shows an error message if the backend fails.
    */
-  logout(): void {
-    this.backend.logout()
-      .then(() => {
-        // Successful logout
-        sessionStorage.removeItem('user');
-        this.isLoggedInSubject.next(false);
-        this.router.navigate(['']);
-      })
-      .catch(error => {
-        let msg = 'Logout failed';
-        if (error instanceof HttpErrorResponse) {
-          msg = error.error?.error || error.message || msg;
-        }
-        this.messageService.showErrorMessage(msg, 0);
-        console.error('Logout error:', error);
-      });
+  /**
+   * Logs out the user. Clears session storage, updates login status,
+   * redirects to the main page, and shows an error message if the backend fails.
+   */
+  async logout(): Promise<void> {
+    try {
+      await this.backend.logout();
+      this.messageService.showSuccessMessage("You have been logged out successfully.", 3);
+
+    } catch (error: any) {
+      this.messageService.showErrorMessage("Logout failed on server, but local session cleared.", 5);
+      console.error('Logout error:', error);
+
+    } finally {
+      sessionStorage.removeItem('user');
+      this.isLoggedInSubject.next(false);
+      this.router.navigate(['']);
+    }
   }
 }
