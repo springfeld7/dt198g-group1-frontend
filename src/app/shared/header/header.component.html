@@ -5,15 +5,22 @@
 
 <div class="header-container">
   <div class="header-left">
-    <img class="logo" src="date_with_speed.png" routerLink="/">
-  </div>
-    
-  <div class="header-middle">
-    <h1>Date with SPEED</h1>
+    <img class="logo" src="/sdlogo.png" routerLink="/" />
   </div>
   
   <div class="header-right">
-    <a *ngIf="!isLoggedIn" routerLink="/login" class="login-link">Login</a>
+    <a *ngIf="!isLoggedIn" routerLink="/signup" class="login-link">
+      <div>
+        <img class="icon" src="/registration.svg" />
+        Register
+      </div>
+    </a>
+    <a *ngIf="!isLoggedIn" routerLink="/login" class="login-link">
+      <div>
+        <img class="icon" src="/login.svg" />
+        Login
+      </div>
+    </a>
     <app-menu *ngIf="isLoggedIn"></app-menu>
   </div>
 </div>
