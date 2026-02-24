@@ -20,9 +20,13 @@
 .matches-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 16pt;
   width: 100%;
-  max-width: 600px; // Limits card width for better desktop viewing
+  max-width: 600px;
+  
+  max-height: 75vh;
+  overflow-y: auto;
+  padding-right: 5px;
 }
 
 .match-card {

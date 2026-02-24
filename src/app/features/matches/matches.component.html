@@ -35,7 +35,7 @@
 <app-confirm-modal 
     [isOpen]="isModalOpen"
     title="Remove Match"
-    [message]="'Are you sure you want to remove ' + selectedMatch?.firstName + '?'"
+    [message]="'Are you sure you want to remove ' + selectedMatch?.firstName + ' ' + selectedMatch?.surname + '?'"
     confirmText="Remove"
     (confirmed)="handleModalResponse($event)">
 </app-confirm-modal>
