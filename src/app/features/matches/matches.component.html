@@ -1,1 +1,41 @@
-<p>matches works!</p>
+<div class="matches-page">
+    <h2 class="page-title">Matches</h2>
+
+    <div class="matches-list">
+        <div class="match-card" *ngFor="let match of matches" [class.new-highlight]="isNewMatch(match)">
+
+            <div class="image-container">
+                <img [src]="getProfilePicUrl(match._id)" alt="Profile" (error)="handleImageError($event)">
+            </div>
+
+            <div class="match-info">
+                <h3>{{ match.firstName }} {{ match.surname }}</h3>
+
+                <div class="info-row">
+                    <span class="label">Mail:</span>
+                    <span class="value">{{ match.email }}</span>
+                </div>
+
+                <div class="info-row">
+                    <span class="label">Phone:</span>
+                    <span class="value">{{ match.phone }}</span>
+                </div>
+            </div>
+
+            <div class="match-actions">
+                <button class="delete-btn" (click)="onRemoveMatch(match)">
+                    <img src="/trash-can.svg" alt="Delete">
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<app-confirm-modal 
+    [isOpen]="isModalOpen"
+    title="Remove Match"
+    [message]="'Are you sure you want to remove ' + selectedMatch?.firstName + '?'"
+    confirmText="Remove"
+    (confirmed)="handleModalResponse($event)">
+</app-confirm-modal>

@@ -1,0 +1,85 @@
+.matches-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center; // Centralizes the list horizontally
+  padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
+
+  .page-title {
+    width: 100%;
+    max-width: 600px; // Aligns title with the cards
+    text-align: left;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+.matches-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 600px; // Limits card width for better desktop viewing
+}
+
+.match-card {
+  display: flex;
+  align-items: center; // Vertical alignment of items inside card
+  justify-content: space-between; // Pushes info to left and trash to right
+  padding: 16px 24px;
+  background-color: #fff;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+
+  .image-container {
+    flex-shrink: 0; // Prevents the image from squishing
+    margin-right: 20px;
+
+    img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%; // Makes the image a perfect circle
+      object-fit: cover; // Ensures the face isn't stretched
+      display: block;
+    }
+  }
+
+  .match-info {
+    flex-grow: 1; // Takes up the middle space
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .info-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+
+      .label {
+        width: 50px; // Keeps the "Mail:" and "Phone:" labels aligned
+      }
+    }
+  }
+
+  .match-actions {
+    display: flex;
+    align-items: center;
+    margin-left: 16px;
+
+    .delete-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      
+      img {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+}
