@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-confirm-modal',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './confirm-modal.component.html', // Pointing to the file
+  templateUrl: './confirm-modal.component.html',
   styleUrls: ['./confirm-modal.component.scss']
 })
 export class ConfirmModalComponent {
