@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { EventComponent } from '../event/event.component';
 import { BackendService } from '../../services/backend.service';
 import { AuthService } from '../../services/auth.service';
+import { MessageService } from '../../services/message.service';
 import type { Event } from '../../models/event';
 
 @Component({
@@ -14,6 +15,7 @@ import type { Event } from '../../models/event';
 export class FeedComponent {
   private backendService = inject(BackendService);
   private authService = inject(AuthService);
+  private messageService = inject(MessageService);
   eventList: Event[] = [];
   futureEvents: Event[] = [];
   isLoggedIn: boolean = false;
@@ -44,6 +46,9 @@ export class FeedComponent {
 
         this.futureEvents = this.eventList.filter(e => new Date(e.date) >= today);
         this.futureEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      })
+      .catch(err => {
+        this.messageService.showErrorMessage(`Failed to load events: ${err.message}`, 5);
       });
   }
 
@@ -77,6 +82,10 @@ export class FeedComponent {
         } else if (this.userGender === 'woman') {
           event.registeredWomen.push(this.userId);
         }
+        this.messageService.showSuccessMessage(`Successfully registered for ${event.title}!`, 3);
+      })
+      .catch(err => {
+        this.messageService.showErrorMessage(`Registration failed: ${err.message}`, 5);
       });
   }
 
@@ -92,6 +101,10 @@ export class FeedComponent {
         } else if (this.userGender === 'woman') {
           event.registeredWomen = event.registeredWomen.filter(id => id !== this.userId);
         }
+        this.messageService.showSuccessMessage(`Successfully unregistered from ${event.title}.`, 3);
       })
+      .catch(err => {
+        this.messageService.showErrorMessage(`Unregistration failed: ${err.message}`, 5);
+      });
   }
 }
