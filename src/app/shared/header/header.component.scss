@@ -1,84 +1,47 @@
-.header-container {
-  width: 100%;
-  background: rgb(104, 38, 82);
-  border-bottom: 4px solid black;
-  height: 80px;
-  line-height: 80px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  align-items: center;
-  position: relative;
-}
+// .header-container {
+//   width: 100%;
+//   background: rgb(104, 38, 82);
+//   border-bottom: 4pt solid black;
+//   height: 80pt;
+//   line-height: 80pt;
+//   display: grid;
+//   grid-template-columns: 1fr 1fr 1fr;
+//   align-items: center;
+//   position: relative;
+// }
+
+// .header-left {
+//   display: flex;
+//   align-items: flex-end;
+//   justify-content: flex-start;
+//   padding-left: 3vw;
+// }
 
 .header-left {
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-start;
-  padding-left: 40px;
-}
-
-.header-middle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Racing Sans One", sans-serif;
-  color: rgb(255, 194, 230);
-  text-shadow:0px 5px 5px  #9e530c;
+  min-width: max-content;
+  padding-left: 3vw;
 }
 
 .header-right {
-  display: flex;
-  align-items: center;
+  display: inline-flex;
   justify-content: flex-end;
-  padding-right: 40px;
+  padding-right: 2vw;
+}
+
+a div {
+  display: grid;
+  justify-items: center;
 }
 
 a {
-  background-color: violet;
-  border: 1px solid black;
-  display: inline-block;
-  height: 100%;
-  padding: 0 30px;
+  margin-left: 2vw;
   text-decoration: none;
-  line-height: 50px;
+  font-size: clamp(10pt, 1vw, 12pt);
+  color: black;
 
   &:hover {
-    background-color: navy;
+    background-color: #f4c6d5;
     color: white;
     cursor: pointer;
-  }
-}
-
-.logo {
-  height: 84px;
-}
-
-// Desktop
-.header-container {
-  height: 80px;
-  grid-template-columns: 1fr 1fr 1fr;
-}
-
-.logo {
-  height: 84px;
-}
-
-// Mobile
-@media (max-width: 768px) {
-  .header-container {
-    height: 70px;
-    grid-template-columns: 1fr auto 1fr;
-  }
-  
-  .logo {
-    height: 50px;
-  }
-  
-  .header-middle {
-    font-size: 10px;
-  }
-  
-  .header-left {
-    padding-left: 10px;
   }
 }
