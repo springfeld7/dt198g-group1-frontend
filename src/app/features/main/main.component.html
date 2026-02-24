@@ -1,1 +1,8 @@
-<app-feed />
+<app-feed *ngIf="loggedIn"></app-feed>
+<div *ngIf="!loggedIn" class="mainInfoTextContainer">
+    <div class="mainInfoTextCard">
+        <h1 class="mainInfoTitle">Welcome to Date with Speed</h1>
+        <p class="mainInfoLead">Fast events, real connections, and zero awkward small talk.</p>
+        <p class="mainInfoBody">Join local speed-dating nights, match with people who share your vibe, and keep the momentum going after the event.</p>
+    </div>
+</div>

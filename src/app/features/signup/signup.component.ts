@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { UserRegistration } from '../../models/user-registration';
+import { UserRegistration } from '../../models/api/user-registration.dto';
 import { CommonModule } from '@angular/common';
 import { Interest } from '../../models/interest';
 import { BackendService } from '../../services/backend.service';

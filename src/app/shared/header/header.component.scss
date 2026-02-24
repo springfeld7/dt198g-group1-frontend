@@ -61,6 +61,30 @@ a {
 
 .logo {
   height: 84px;
+  cursor:grab;
+  transition: transform 120ms ease;
+  transform-origin: center;
+}
+
+@keyframes grab-squeeze {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(0.94, 1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.logo:hover {
+  transform: scale(1.03);
+}
+
+.logo:active {
+  cursor: grabbing;
+  animation: grab-squeeze 180ms ease-out;
 }
 
 // Mobile
@@ -71,8 +95,32 @@ a {
   }
   
   .logo {
-    height: 50px;
+  height: 84px;
+  cursor:grab;
+  transition: transform 120ms ease;
+  transform-origin: center;
+}
+
+@keyframes grab-squeeze {
+  0% {
+    transform: scale(1);
   }
+  40% {
+    transform: scale(0.94, 1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.logo:hover {
+  transform: scale(1.03);
+}
+
+.logo:active {
+  cursor: grabbing;
+  animation: grab-squeeze 180ms ease-out;
+}
   
   .header-middle {
     font-size: 10px;
