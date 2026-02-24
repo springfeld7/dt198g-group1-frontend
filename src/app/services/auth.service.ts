@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { BackendService } from './backend.service';
 import { MessageService } from './message.service';
-import { HttpErrorResponse } from '@angular/common/http';
 import { User } from '../models/user';
 
 @Injectable({
@@ -44,7 +43,7 @@ export class AuthService {
    */
   getUserId(): string {
     const parsedUser = this.getParsedUser();
-    return parsedUser?.id || '';
+    return parsedUser?._id || '';
   }
 
   /**
@@ -108,7 +107,6 @@ export class AuthService {
 
       sessionStorage.setItem('user', JSON.stringify(user));
       this.isLoggedInSubject.next(true);
-
 
       this.messageService.showSuccessMessage(`Welcome ${this.getUsername()}! You have successfully logged in.`, 5);
 
