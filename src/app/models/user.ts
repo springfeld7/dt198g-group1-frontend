@@ -12,6 +12,10 @@ export interface User {
     gender?: 'man' | 'woman';
     age?: number;
     interests?: Interest[];
-    matches?: string[];
+    matches?: {
+        user: string | User;
+        isSeen: boolean;
+        matchedAt: Date;
+    }[];
     img?: string;
 }
