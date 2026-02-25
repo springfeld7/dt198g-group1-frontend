@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user';
 import { MessageService } from '../../services/message.service';
 import { ConfirmModalComponent } from '../shared/confirm-modal/confirm-modal.component';
+import { Match } from '../../models/match';
 
 @Component({
   selector: 'app-matches',
@@ -19,10 +20,10 @@ export class MatchesComponent implements OnInit {
   private auth = inject(AuthService);
   private messageService = inject(MessageService);
 
-  matches: User[] = [];
+  matches: Match[] = [];
   userId: string = '';
   isModalOpen = false;
-  selectedMatch: User | null = null;
+  selectedMatch: Match | null = null;
 
   /**
    * Initializes the component by fetching the current user's matches.
@@ -51,7 +52,7 @@ export class MatchesComponent implements OnInit {
    * Called when clicking the trash icon.
    * Instead of deleting immediately, we prepare the modal.
    */
-  onRemoveMatch(match: User) {
+  onRemoveMatch(match: Match) {
     this.selectedMatch = match;
     this.isModalOpen = true;
   }

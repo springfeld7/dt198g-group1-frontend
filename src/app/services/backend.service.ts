@@ -7,11 +7,13 @@ import { Interest } from '../models/interest';
 import { Question } from '../models/question';
 import { Review } from '../models/review';
 import { User } from '../models/user';
+import { Match } from '../models/match';
 import { LoginResponse } from '../models/api/login-response.dto';
 import { RegistrationResponse } from '../models/api/reg-response.dto';
 import { UserRegistration } from '../models/api/user-registration.dto';
 import { DeleteEventResponse } from '../models/api/delete-event-response.dto';
 import { UserUpdateData } from '../models/api/user-update.dto';
+
 
 @Injectable({
 	providedIn: 'root'
@@ -123,13 +125,13 @@ export class BackendService {
 	 * Retrieves all matches for a specific user.
 	 * 
 	 * @param {string} id - The User ID to find matches for.
-	 * @returns {Promise<User[]>} A Promise resolving to an array of matched User objects.
+	 * @returns {Promise<Match[]>} A Promise resolving to an array of matched User objects.
 	 */
-	getUserMatches(id: string): Promise<User[]> {
+	getUserMatches(id: string): Promise<Match[]> {
 		const endpoint = `${this.URL}/users/${id}/matches`;
 
 		return firstValueFrom(
-			this.http.get<User[]>(endpoint, this.httpOptions)
+			this.http.get<Match[]>(endpoint, this.httpOptions)
 		);
 	}
 
