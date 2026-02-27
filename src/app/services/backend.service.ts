@@ -147,6 +147,19 @@ export class BackendService {
 		return firstValueFrom(this.http.delete<any>(endpoint, this.httpOptions));
 	}
 
+	/**
+	 * Marks all matches of a specific user as seen.
+	 *
+	 * @param {string} userId - The ID of the user whose matches should be marked as seen.
+	 * @returns {Promise<any>} A promise resolving to the server response.
+	 */
+	markMatchesAsSeen(userId: string): Promise<any> {
+		const endpoint = `${this.URL}/users/${userId}/matches/seen`;
+
+		// Calls the backend PATCH endpoint
+		return firstValueFrom(this.http.patch<any>(endpoint, {}, this.httpOptions));
+	}
+
 	// ===============================================================
 	// EVENT METHODS
 	// ===============================================================

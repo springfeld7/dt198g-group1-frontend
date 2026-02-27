@@ -31,8 +31,8 @@
 
 .match-card {
   display: flex;
-  align-items: center; // Vertical alignment of items inside card
-  justify-content: space-between; // Pushes info to left and trash to right
+  align-items: center;
+  justify-content: space-between;
   padding: 16px 24px;
   background-color: #fff;
   border-radius: 8px;
@@ -40,20 +40,20 @@
   box-sizing: border-box;
 
   .image-container {
-    flex-shrink: 0; // Prevents the image from squishing
+    flex-shrink: 0;
     margin-right: 20px;
 
     img {
       width: 70px;
       height: 70px;
-      border-radius: 50%; // Makes the image a perfect circle
-      object-fit: cover; // Ensures the face isn't stretched
+      border-radius: 50%;
+      object-fit: cover;
       display: block;
     }
   }
 
   .match-info {
-    flex-grow: 1; // Takes up the middle space
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -85,5 +85,26 @@
         height: 24px;
       }
     }
+  }
+}
+
+.match-card.new-highlight {
+  border: 3px solid #e62f5add;
+  box-shadow: 0 0 8px rgba(230, 57, 216, 0.371); // subtle glow
+  transition: border 0.3s, box-shadow 0.3s;
+
+  // Automatically fade the highlight over 10 seconds
+  animation: fadeHighlight 12s forwards;
+}
+
+// Keyframes for fading border and shadow
+@keyframes fadeHighlight {
+  0% {
+    border-color: #e62f5add;
+    box-shadow: 0 0 8px rgba(230, 57, 216, 0.371);
+  }
+  100% {
+    border-color: transparent;
+    box-shadow: none;
   }
 }

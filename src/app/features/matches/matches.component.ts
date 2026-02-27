@@ -20,7 +20,8 @@ export class MatchesComponent implements OnInit {
   private auth = inject(AuthService);
   private messageService = inject(MessageService);
 
-  matches: SharedContact[] = [];
+  matches: (SharedContact & { highlighted?: boolean })[] = [];
+  newMatchesCount = 0;
   userId: string = '';
   isModalOpen = false;
   selectedMatch: SharedContact | null = null;
@@ -40,12 +41,34 @@ export class MatchesComponent implements OnInit {
   loadMatches() {
     this.backend.getUserSharedContacts(this.userId)
       .then(data => {
-        this.matches = data;
+        this.matches = data
+          .sort((a, b) => new Date(b.matchedAt).getTime() - new Date(a.matchedAt).getTime())
+          .map(m => ({ ...m, highlighted: !m.isSeen })); // highlight only unseen
+
+        this.newMatchesCount = this.matches.filter(m => m.highlighted).length;
+        if (this.newMatchesCount > 0) {
+          this.showNewMatchesPopup();
+        }
+
+        this.markAllMatchesAsSeen();
       })
       .catch(err => {
         this.messageService.showErrorMessage(`Failed to load matches: ${err.message}`, 5);
         console.error("Match load error:", err);
       });
+  }
+
+  /**
+   * Marks all matches as seen in the backend.
+   */
+  private markAllMatchesAsSeen() {
+    const hasUnseen = this.matches.some(m => !m.isSeen);
+    if (!hasUnseen) return;
+
+    this.backend.markMatchesAsSeen(this.userId)
+      .then(() => {
+      })
+      .catch(err => console.error("Failed to mark matches as seen:", err));
   }
 
   /**
@@ -110,7 +133,16 @@ export class MatchesComponent implements OnInit {
    * @returns whether the match with the given ID is new and unviewed by the user.
    */
   isNewSharedContact(match: SharedContact): boolean {
-    
-    return false;
+    return !match.isSeen;
+  }
+
+  /**
+ * Temporary popup for new matches
+ */
+  showNewMatchesPopup() {
+    this.messageService.showSuccessMessage(
+      `You have ${this.newMatchesCount} new match${this.newMatchesCount > 1 ? 'es' : ''}!`,
+      5
+    );
   }
 }
