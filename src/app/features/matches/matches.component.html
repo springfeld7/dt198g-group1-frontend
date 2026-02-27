@@ -2,7 +2,7 @@
     <h2 class="page-title">Matches</h2>
 
     <div class="matches-list">
-        <div class="match-card" *ngFor="let match of matches" [class.new-highlight]="isNewMatch(match)">
+        <div class="match-card" *ngFor="let match of matches" [class.new-highlight]="isNewSharedContact(match)">
 
             <div class="image-container">
                 <img [src]="getProfilePicUrl(match._id)" alt="Profile" (error)="handleImageError($event)">
@@ -23,7 +23,7 @@
             </div>
 
             <div class="match-actions">
-                <button class="delete-btn" (click)="onRemoveMatch(match)">
+                <button class="delete-btn" (click)="onRemoveSharedContact(match)">
                     <img src="/trash-can.svg" alt="Delete">
                 </button>
             </div>
@@ -34,7 +34,7 @@
 
 <app-confirm-modal 
     [isOpen]="isModalOpen"
-    title="Remove Match"
+    title="Remove Shared Contact"
     [message]="'Are you sure you want to remove ' + selectedMatch?.firstName + ' ' + selectedMatch?.surname + '?'"
     confirmText="Remove"
     (confirmed)="handleModalResponse($event)">

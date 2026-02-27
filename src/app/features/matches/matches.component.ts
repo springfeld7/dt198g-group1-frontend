@@ -5,7 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user';
 import { MessageService } from '../../services/message.service';
 import { ConfirmModalComponent } from '../shared/confirm-modal/confirm-modal.component';
-import { Match } from '../../models/match';
+import { SharedContact } from '../../models/shared-contact';
 
 @Component({
   selector: 'app-matches',
@@ -20,10 +20,10 @@ export class MatchesComponent implements OnInit {
   private auth = inject(AuthService);
   private messageService = inject(MessageService);
 
-  matches: Match[] = [];
+  matches: SharedContact[] = [];
   userId: string = '';
   isModalOpen = false;
-  selectedMatch: Match | null = null;
+  selectedMatch: SharedContact | null = null;
 
   /**
    * Initializes the component by fetching the current user's matches.
@@ -38,7 +38,7 @@ export class MatchesComponent implements OnInit {
    * Utilizes MessageService for user-facing error feedback.
    */
   loadMatches() {
-    this.backend.getUserMatches(this.userId)
+    this.backend.getUserSharedContacts(this.userId)
       .then(data => {
         this.matches = data;
       })
@@ -52,7 +52,7 @@ export class MatchesComponent implements OnInit {
    * Called when clicking the trash icon.
    * Instead of deleting immediately, we prepare the modal.
    */
-  onRemoveMatch(match: Match) {
+  onRemoveSharedContact(match: SharedContact) {
     this.selectedMatch = match;
     this.isModalOpen = true;
   }
@@ -76,13 +76,13 @@ export class MatchesComponent implements OnInit {
    * @param matchId the ID of the match to delete.
    */
   private executeDelete(matchId: string) {
-    this.backend.removeMatch(matchId)
+    this.backend.removeSharedContact(matchId)
       .then(() => {
         this.matches = this.matches.filter(m => m._id !== matchId);
-        this.messageService.showSuccessMessage("Match removed.", 3);
+        this.messageService.showSuccessMessage("Shared contact removed.", 3);
       })
       .catch(err => {
-        this.messageService.showErrorMessage(`Failed to remove match: ${err.message}`, 5);
+        this.messageService.showErrorMessage(`Failed to remove shared contact: ${err.message}`, 5);
       });
   }
 
@@ -109,8 +109,8 @@ export class MatchesComponent implements OnInit {
    * @param id the ID of the match to check.
    * @returns whether the match with the given ID is new and unviewed by the user.
    */
-  isNewMatch(match: User): boolean {
-    //return match.isSeen === false;
-    return false; // Placeholder until backend supports this feature
+  isNewSharedContact(match: SharedContact): boolean {
+    
+    return false;
   }
 }
