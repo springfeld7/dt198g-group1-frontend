@@ -7,7 +7,7 @@ import { Interest } from '../models/interest';
 import { Question } from '../models/question';
 import { Review } from '../models/review';
 import { User } from '../models/user';
-import { Match } from '../models/match';
+import { SharedContact } from '../models/shared-contact';
 import { LoginResponse } from '../models/api/login-response.dto';
 import { RegistrationResponse } from '../models/api/reg-response.dto';
 import { UserRegistration } from '../models/api/user-registration.dto';
@@ -122,26 +122,26 @@ export class BackendService {
 	}
 
 	/**
-	 * Retrieves all matches for a specific user.
+	 * Retrieves all shared contacts for a specific user.
 	 * 
 	 * @param {string} id - The User ID to find matches for.
-	 * @returns {Promise<Match[]>} A Promise resolving to an array of matched User objects.
+	 * @returns {Promise<SharedContact[]>} A Promise resolving to an array of SharedContact objects.
 	 */
-	getUserMatches(id: string): Promise<Match[]> {
+	getUserSharedContacts(id: string): Promise<SharedContact[]> {
 		const endpoint = `${this.URL}/users/${id}/matches`;
 
 		return firstValueFrom(
-			this.http.get<Match[]>(endpoint, this.httpOptions)
+			this.http.get<SharedContact[]>(endpoint, this.httpOptions)
 		);
 	}
 
 	/**
-	 * Removes a match between the current user and a matched user.
+	 * Removes a shared contact.
 	 *
-	 * @param {string} matchId - The ID of the user to be removed from matches.
+	 * @param {string} matchId - The ID of the user to be removed from shared contact matches.
 	 * @returns {Promise<any>} A promise resolving to the server response.
 	 */
-	removeMatch(matchId: string): Promise<any> {
+	removeSharedContact(matchId: string): Promise<any> {
 		const endpoint = `${this.URL}/users/matches/${matchId}`;
 
 		return firstValueFrom(this.http.delete<any>(endpoint, this.httpOptions));

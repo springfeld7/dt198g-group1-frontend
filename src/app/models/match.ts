@@ -1,10 +1,9 @@
+import { User } from './user';
+import { Review } from './review';
+
 export interface Match {
-    _id: string;
-    firstName: string;
-    surname: string;
-    email: string;
-    phone: string;
-    isSeen: boolean;
-    matchedAt: string | Date;
-    img: string;
+  _id: string;
+  man: string | User;
+  woman: string | User;
+  reviews: (string | Review)[];
 }
