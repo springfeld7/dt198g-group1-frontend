@@ -1,3 +1,42 @@
-<p>profile/view works!</p>
-
-<a routerLink="/profile/edit">Edit profile</a>
+<div class="profile-container" *ngIf="user">
+  <div class="profile-header">
+    <img class="profile-picture" [src]="user.img" alt="Profile picture">
+    <!-- <img class="profile-picture" src="https://www.unfinishedman.com/wp-content/uploads/2024/06/giga-chad-Ernest-Khalimov-1.jpg" alt="Profile picture"> -->
+    <div class="profile-info">
+      <div class="info-item">
+        <p class="value">{{ user.firstName }} {{ user.surname }}</p>
+        <h3 class="label">Name</h3>
+        
+      </div>
+      
+      <div class="info-item">
+        <p class="value">{{ user.age }}</p>
+        <h3 class="label">Age</h3>
+      </div>
+      
+      <div class="info-item">
+        <p class="value">{{ user.email }}</p>
+        <h3 class="label">Mail</h3>
+      </div>
+      
+      <div class="info-item">
+        <p class="value">{{ user.phone }}</p>
+        <h3 class="label">Phone</h3>
+      </div>
+      
+      <div class="info-item">
+        <p class="value">{{ user.location }}</p>
+        <h3 class="label">Location</h3>
+      </div>
+      
+      <div class="interests-item" *ngIf="user.interests && user.interests.length">
+        <h3 class="label">Interests</h3>
+        <div class="interests-list">
+          <p *ngFor="let interest of user.interests" class="interest-tag">{{ interest.name }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <button routerLink="/profile/edit" class="edit-btn">Edit</button>
+</div>
