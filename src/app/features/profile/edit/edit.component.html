@@ -1,1 +1,91 @@
-<p>profile/edit works!</p>
+<div class="edit-container" *ngIf="user">
+  <div class="edit-header">
+    <div class="profile-picture-section">
+      <img *ngIf="user.img; else profileFallback" class="profile-picture" [src]="user.img" alt="Profile">
+      <ng-template #profileFallback>
+        <div class="profile-picture profile-picture-fallback">Profile</div>
+      </ng-template>
+      <button type="button" class="change-image-btn" (click)="onChangeImage()">Change image</button>
+    </div>
+
+    <form class="edit-form" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+      <div class="form-field">
+        <label>Name</label>
+        <input type="text" formControlName="firstName" placeholder="Name">
+      </div>
+
+      <div class="form-field">
+        <label>Surname</label>
+        <input type="text" formControlName="surname" placeholder="Surname">
+      </div>
+
+      <div class="form-field">
+        <label>Username</label>
+        <input type="text" formControlName="username" placeholder="username">
+      </div>
+
+      <div class="form-field">
+        <label>Age</label>
+        <input type="number" formControlName="age" placeholder="Age">
+      </div>
+
+      <div class="form-field">
+        <label>Mail</label>
+        <input type="email" formControlName="email" placeholder="Mail">
+      </div>
+
+      <div class="form-field">
+        <label>Phone</label>
+        <input type="tel" formControlName="phone" placeholder="Phone">
+      </div>
+
+      <div class="form-field">
+        <label>Location</label>
+        <input type="text" formControlName="location" placeholder="Location">
+      </div>
+
+
+      <div class="form-field">
+        <label>Update Password</label>
+        <input type="password" formControlName="password" placeholder="New password">
+      </div>
+
+      <div class="form-field">
+        <label>Retype new password</label>
+        <input type="password" formControlName="retypePassword" placeholder="Retype password">
+      </div>
+
+      <div class="interests-section">
+        <label class="interests-label">Interests</label>
+        <div class="interests-dropdowns">
+          <select formControlName="interest1">
+            <option value="">Interest 1</option>
+            <option *ngFor="let interest of allInterests" [value]="interest._id">{{ interest.name }}</option>
+          </select>
+          
+          <select formControlName="interest2">
+            <option value="">Interest 2</option>
+            <option *ngFor="let interest of allInterests" [value]="interest._id">{{ interest.name }}</option>
+          </select>
+          
+          <select formControlName="interest3">
+            <option value="">Interest 3</option>
+            <option *ngFor="let interest of allInterests" [value]="interest._id">{{ interest.name }}</option>
+          </select>
+          
+          <select formControlName="interest4">
+            <option value="">Interest 4</option>
+            <option *ngFor="let interest of allInterests" [value]="interest._id">{{ interest.name }}</option>
+          </select>
+          
+          <select formControlName="interest5">
+            <option value="">Interest 5</option>
+            <option *ngFor="let interest of allInterests" [value]="interest._id">{{ interest.name }}</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="save-btn">Save</button>
+    </form>
+  </div>
+</div>
