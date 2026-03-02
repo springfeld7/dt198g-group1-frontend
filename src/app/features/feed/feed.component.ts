@@ -5,6 +5,7 @@ import { BackendService } from '../../services/backend.service';
 import { AuthService } from '../../services/auth.service';
 import { MessageService } from '../../services/message.service';
 import type { Event } from '../../models/event';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-feed',
@@ -58,13 +59,17 @@ export class FeedComponent {
    * @param registeredWomen list with userId's of all signed up women
    * @returns true if this.userId is included in any of the lists
    */
-  isSignedUpFor(registeredMen: string[], registeredWomen: string[]): boolean {
-    if (this.userGender === 'man' && registeredMen.includes(this.userId)) {
-      return true;
+  isSignedUpFor(registeredMen: (string | User)[], registeredWomen: (string | User)[]): boolean {
+    if (this.userGender === 'man') {
+      if (registeredMen.includes(this.userId)) {
+        return true;
+      }
     }
 
-    if (this.userGender === 'woman' && registeredWomen.includes(this.userId)) {
-      return true;
+    if (this.userGender === 'woman') {
+      if (registeredWomen.includes(this.userId)) {
+        return true;
+      }
     }
 
     return false;
