@@ -1,0 +1,102 @@
+<div class="visualization-container">
+
+    <h2>Matching Algorithm Visualization</h2>
+
+    <div class="controls">
+        <button (click)="play()">Play</button>
+        <button (click)="pause()">Pause</button>
+        <button (click)="reset()">Reset</button>
+
+        <span class="step-indicator">
+            Step {{ currentStep }} / {{ updates.length }}
+        </span>
+
+        <div class="fps-control">
+            <label>
+                Snapshots per second:
+                <input type="number" [ngModel]="snapshotsPerSecond" (ngModelChange)="onSnapshotsPerSecondChange($event)"
+                    min="1" max="60" step="1">
+            </label>
+            <small>(min 1, max 60)</small>
+        </div>
+    </div>
+
+    <table class="heatmap">
+
+        <thead>
+            <tr>
+                <th></th>
+                <th *ngFor="let woman of women">
+                    {{ woman.username }}
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr *ngFor="let row of currentMatrix; let i = index">
+
+                <th class="row-label">
+                    {{ men[i].username }}
+                </th>
+
+                <td *ngFor="let value of row; let j = index" class="heat-cell" [style.background]="getHeatColor(value)"
+                    (mouseenter)="showTooltip(i,j)" (mouseleave)="clearTooltip()">
+
+                    <span *ngIf="value > -1000">
+                        {{ value | number:'1.2-2' }}
+                    </span>
+
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+
+    <div *ngIf="hoveredBreakdown" class="tooltip">
+
+        <h3>
+            Man: {{ hoveredMan?.username }}
+            <br>
+            Woman: {{ hoveredWoman?.username }}
+        </h3>
+
+        <div class="breakdown">
+
+            <div>
+                Interest similarity:
+                <span>{{ hoveredBreakdown.interest | number:'1.2-2' }}</span>
+            </div>
+
+            <div>
+                Previous happiness bias:
+                <span>{{ hoveredBreakdown.happy | number:'1.2-2' }}</span>
+            </div>
+
+            <div>
+                Age preference match:
+                <span>{{ hoveredBreakdown.age | number:'1.2-2' }}</span>
+            </div>
+
+            <hr>
+
+            <div class="final-score">
+                Final score:
+                <span>
+                    {{
+                    hoveredBreakdown.interest +
+                    hoveredBreakdown.happy +
+                    hoveredBreakdown.age
+                    | number:'1.2-2'
+                    }}
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

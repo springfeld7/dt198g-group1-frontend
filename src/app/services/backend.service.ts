@@ -13,6 +13,7 @@ import { RegistrationResponse } from '../models/api/reg-response.dto';
 import { UserRegistration } from '../models/api/user-registration.dto';
 import { DeleteEventResponse } from '../models/api/delete-event-response.dto';
 import { UserUpdateData } from '../models/api/user-update.dto';
+import { MatchingResponseDto } from '../models/api/matching-response.dto';
 
 
 @Injectable({
@@ -261,6 +262,22 @@ export class BackendService {
 		const endpoint = `${this.URL}/events/${id}`;
 
 		return firstValueFrom(this.http.delete<DeleteEventResponse>(endpoint, this.httpOptions));
+	}
+
+	/**
+	 * Generates matches for a specific round of an event along with snapshots for visualization.
+	 *
+	 * @param eventId - The ID of the event.
+	 * @param round - The round number (1, 2, or 3).
+	 * @returns {Promise<MatchingResponseDto>} A promise resolving to the matching result
+	 * containing matched pairs and algorithm snapshots.
+	 */
+	generateMatches(eventId: string, round: number): Promise<MatchingResponseDto> {
+		const endpoint = `${this.URL}/events/${eventId}/${round}/match`;
+
+		return firstValueFrom(
+			this.http.get<MatchingResponseDto>(endpoint, this.httpOptions)
+		);
 	}
 
 	// ===============================================================
