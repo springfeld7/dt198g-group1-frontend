@@ -1,4 +1,5 @@
 <div class="event-feed">
+  <button (click)="onCreate()" *ngIf="isAdmin">Create Event</button>
   <div class="event-wrapper"
        *ngFor="let event of (isAdmin ? eventList : futureEvents)">
 
@@ -13,11 +14,13 @@
       [event]="event"
       [isRegistered]="isSignedUpFor(event.registeredMen, event.registeredWomen)"
       [userGender]="userGender"
+      [isAdmin]="isAdmin"
       [ngClass]="{
         'past-event': isAdmin && !futureEvents.includes(event)
       }"
       (registerClicked)="onRegister(event)"
-      (unregisterClicked)="onUnregister(event)">
+      (unregisterClicked)="onUnregister(event)"
+      (editClicked)="onEdit(event)">
     </app-event>
 
   </div>

@@ -1,6 +1,7 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Event } from '../../models/event';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-event',
@@ -10,13 +11,14 @@ import { Event } from '../../models/event';
   styleUrl: './event.component.scss'
 })
 export class EventComponent {
-
   @Input() event!: Event;
   @Input() isRegistered: boolean = false;
   @Input() userGender: 'man' | 'woman' | null = null;
+  @Input() isAdmin: boolean = false;
 
   @Output() registerClicked = new EventEmitter<void>();
   @Output() unregisterClicked = new EventEmitter<void>();
+  @Output() editClicked = new EventEmitter<void>();
 
   /** Max spots per gender */
   get maxPerGender(): number {
@@ -57,5 +59,10 @@ export class EventComponent {
   /** Emits an event when the user clicks the unregister button. */
   onUnregister(): void {
     this.unregisterClicked.emit();
+  }
+
+  /** Emits an event when the user clicks the edit button. */
+  onEdit(): void {
+    this.editClicked.emit();
   }
 }
