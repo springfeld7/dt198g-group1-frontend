@@ -12,13 +12,13 @@
   </button>
   
   <div class="menu-dropdown" *ngIf="isOpen">
-    <a routerLink="/profile" class="menu-item" (click)="closeMenu()">
+    <a *ngIf="!isAdmin" routerLink="/profile" class="menu-item" (click)="closeMenu()">
       <img class="icon" src="/profile-circle.svg" />Profile
     </a>
     <a routerLink="/events" class="menu-item" (click)="closeMenu()">
       <img class="icon" src="/calendar.svg" />Events
     </a>
-    <a routerLink="/matches" class="menu-item" (click)="closeMenu()">
+    <a *ngIf="!isAdmin" routerLink="/matches" class="menu-item" (click)="closeMenu()">
       <img class="icon" src="/heart.svg" />Matches
     </a>
     <a class="menu-item" (click)="logout()">
