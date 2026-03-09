@@ -1,3 +1,12 @@
+form {
+    text-align: center;
+
+    button {
+        display: block;
+        margin: 20pt auto;
+    }
+}
+
 label {
     &.labelForCheckbox,
     &.labelForRadio {
@@ -20,8 +29,4 @@ label {
 
 .hide {
     display: none;
-}
-
-form {
-    justify-self: center;
 }
