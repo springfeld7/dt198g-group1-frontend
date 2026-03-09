@@ -1,0 +1,15 @@
+<div class="table-container">
+  <div
+    class="seat left"
+    [class.your-seat]="isCurrentUserSeat('left')"
+    [attr.title]="getSeatTitle('left')"
+  ></div>
+  <div class="table-box">
+    <div class="table-number">{{ table.id }}</div>
+  </div>
+  <div
+    class="seat right"
+    [class.your-seat]="isCurrentUserSeat('right')"
+    [attr.title]="getSeatTitle('right')"
+  ></div>
+</div>
