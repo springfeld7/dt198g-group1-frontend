@@ -1,0 +1,33 @@
+<div class="seating-container">
+  <h1>Table Map</h1>
+  
+  <div class="tables-grid">
+    <div class="row" *ngFor="let row of [0, 1, 2, 3, 4]">
+      <app-seat-pair 
+        *ngFor="let table of tables.slice(row * 2, row * 2 + 2)" 
+        [table]="table"
+        [isOrganizer]="isOrganizer"
+        [currentUserId]="currentUserId">
+      </app-seat-pair>
+    </div>
+  </div>
+  
+  <div class="entrance">
+    <div></div>
+  </div>
+  
+  <div class="info">
+    <div class="info-item">
+      <div class="seat-icon your-seat"></div>
+      <span>= Your Seat</span>
+    </div>
+    <div class="info-item">
+      <div class="seat-icon empty"></div>
+      <span>= Empty Seat</span>
+    </div>
+    <div class="info-item">
+      <div class="entrance-icon"></div>
+      <span>= You Enter From Here</span>
+    </div>
+  </div>
+</div>
