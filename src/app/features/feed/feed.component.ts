@@ -37,6 +37,15 @@ export class FeedComponent {
     this.isAdmin = this.authService.getIsAdmin();
     this.userId = this.authService.getUserId();
 
+    // Fetch user's gender
+    this.backendService.getUserById(this.userId)
+      .then(user => {
+        this.userGender = user.gender || null;
+      })
+      .catch(err => {
+        this.messageService.showErrorMessage(`Failed to load user data: ${err.message}`, 5);
+      });
+
     this.backendService.getAllEvents()
       .then(events => {
         const today = new Date();
@@ -111,5 +120,22 @@ export class FeedComponent {
       .catch(err => {
         this.messageService.showErrorMessage(`Unregistration failed: ${err.message}`, 5);
       });
+  }
+
+  /**
+   * Handles creation of an event.
+   */
+  onCreate() {
+    // TODO: Navigate to create event page
+    console.log('Create event');
+  }
+
+  /**
+   * Handles editing of an event.
+   * @param event the event to edit.
+   */
+  onEdit(event: Event) {
+    // TODO: Navigate to edit event page
+    console.log('Edit event:', event);
   }
 }
