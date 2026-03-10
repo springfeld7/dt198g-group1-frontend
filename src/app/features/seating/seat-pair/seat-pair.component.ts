@@ -34,4 +34,12 @@ export class SeatPairComponent {
   private getSeatByPosition(position: 'left' | 'right'): Seat | undefined {
     return this.table?.seats.find((seat) => seat.position === position);
   }
+
+  get leftSeat(): Seat | undefined {
+    return this.table?.seats.find(s => s.position === 'left');
+  }
+
+  get rightSeat(): Seat | undefined {
+    return this.table?.seats.find(s => s.position === 'right');
+  }
 }
