@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SeatPairComponent } from './seat-pair/seat-pair.component';
+import { AuthService } from '../../services/auth.service';
 
 export interface Seat {
   id: string;
@@ -23,8 +24,8 @@ export interface Table {
   styleUrl: './seating.component.scss'
 })
 export class SeatingComponent {
-  isOrganizer = false;
-  currentUserId = 'user123';
+  isAdmin = false;
+  currentUserId = '';
 
   tables: Table[] = [
     {
@@ -98,4 +99,11 @@ export class SeatingComponent {
       ]
     }
   ];
+
+  constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.currentUserId = this.authService.getUserId()
+    this.isAdmin = this.authService.getIsAdmin()
+  }
 }
