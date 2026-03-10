@@ -4,5 +4,6 @@ export interface LoginResponse {
     userId: string;
     username: string;
     isAdmin: boolean;
+    gender?: 'man' | 'woman';
   };
 }

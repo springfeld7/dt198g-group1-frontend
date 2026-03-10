@@ -65,6 +65,15 @@ export class AuthService {
   }
 
   /**
+   * Gets the gender from session storage if it exists.
+   * @returns {string} gender ('man' | 'woman') or empty string if does not exist.
+   */
+  getUserGender(): string {
+    const parsedUser = this.getParsedUser();
+    return parsedUser?.gender || '';
+  }
+
+  /**
  * Helper to get the parsed user object from sessionStorage.
  * @return {any | null} parsed user object or null if not found or invalid.
  */
@@ -102,7 +111,8 @@ export class AuthService {
       const user: User = {
         _id: response.user.userId,
         username: response.user.username,
-        isAdmin: response.user.isAdmin
+        isAdmin: response.user.isAdmin,
+        gender: response.user.gender
       };
 
       sessionStorage.setItem('user', JSON.stringify(user));
