@@ -32,18 +32,31 @@
       </span>
     </div>
 
-    <!-- Register / Unregister buttons -->
+    <div class="event-countdown" *ngIf="countdown">
+      {{ countdown }}
+    </div>
+
     <div class="event-actions" *ngIf="!isAdmin">
-      <button *ngIf="!isRegistered" (click)="onRegister()" [disabled]="isRegisterDisabled" [class.full]="isRegisterDisabled">
-        {{ isRegisterDisabled ? 'Full' : 'Register' }}
+      <!-- Show Register/Unregister only if event hasn't started -->
+      <ng-container *ngIf="!eventStarted">
+        <button *ngIf="!isRegistered" (click)="onRegister()" [disabled]="isRegisterDisabled">
+          {{ isRegisterDisabled ? 'Full' : 'Register' }}
+        </button>
+        <button *ngIf="isRegistered" (click)="onUnregister()">Unregister</button>
+      </ng-container>
+
+      <!-- Show Check in button if event has started -->
+      <button *ngIf="eventStarted && !isAdmin" class="minty" (click)="onCheckIn()">
+        Check in
       </button>
-      <button *ngIf="isRegistered" (click)="onUnregister()">Unregister</button>
     </div>
 
     <div class="event-actions" *ngIf="isAdmin">
-      <button (click)="onEdit()">
-        Edit
-      </button>
+      <!-- Manage button: visible 15 min before to 75 min after event starts -->
+      <button *ngIf="showManageButton" class="minty" (click)="onManage()">Manage</button>
+
+      <!-- Edit button -->
+      <button (click)="onEdit()">Edit</button>
     </div>
 
   </div>
