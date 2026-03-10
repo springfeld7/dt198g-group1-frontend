@@ -1,12 +1,58 @@
 .event-card {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
     background-color: #ffffff;
     border-radius: 12pt;
-    padding: 1.5rem;
+    padding: clamp(0.5rem, 2vw, 1.5rem);
     color: #1f1f1f;
-    flex-wrap: wrap;
     box-shadow: 0 2pt 6pt rgba(0, 0, 0, 0.1);
+}
+
+.event-countdown {
+    font-size: clamp(12px, 1.2vw, 16px); // scales with screen width
+    font-weight: 600;
+    color: #e75daa; // pink to match your entrance line
+    margin-top: 8px;
+    margin-bottom: 8px;
+    text-align: left; // centers under the event content
+    letter-spacing: 0.5px;
+}
+
+.event-content {
+    width: 300pt;
+    max-width: 50vw;
+}
+
+/* Single reusable minty button class */
+.event-actions button.minty {
+    background-color: #2ed8a0;
+    margin-right: 0.5rem;
+}
+
+.event-actions button.minty:hover {
+    background-color: #25c38a;
+}
+
+.event-actions button.minty:disabled {
+    background-color: #a7f3d0;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.event-actions button.minty:disabled:hover {
+    background-color: #a7f3d0;
+}
+
+@media (max-width: 400px) {
+    .event-card {
+        max-width: 75vw;
+    }
+
+    .event-content {
+        max-width: 100%;
+        min-width: 100%;
+    }
 }
 
 .event-title {
@@ -32,13 +78,14 @@
 
 .event-availability {
     display: flex;
-    gap: 1rem;
+    // flex-wrap: wrap;
+    gap: clamp(0.5rem, 1vw, 1.5rem);
     margin-bottom: 0.5rem;
 
     .gender-icon {
         width: 24pt;
         height: 24pt;
-        margin-right: 0.25rem;
+        margin-right: 0.1rem;
         vertical-align: middle;
         filter: invert(29%) sepia(86%) saturate(457%) hue-rotate(252deg) brightness(92%) contrast(92%);
         /* gives a violet tone to svg icons */
@@ -78,7 +125,7 @@
 }
 
 .event-image {
-    flex-shrink: 0;
+    flex-grow: 1;
     border-radius: 8pt;
     overflow: hidden;
 }
@@ -88,5 +135,4 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    border-radius: 8pt;
 }

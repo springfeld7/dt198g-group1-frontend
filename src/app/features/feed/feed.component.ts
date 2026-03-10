@@ -37,15 +37,23 @@ export class FeedComponent {
     this.isAdmin = this.authService.getIsAdmin();
     this.userId = this.authService.getUserId();
 
+    const gender = this.authService.getUserGender();
+    this.userGender = (gender === 'man' || gender === 'woman') ? gender : null;
+
     this.backendService.getAllEvents()
       .then(events => {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
         this.eventList = events;
         this.eventList.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-        this.futureEvents = this.eventList.filter(e => new Date(e.date) >= today);
+        const now = new Date().getTime();
+        const oneHourMs = 60 * 60 * 1000;
+
+        // Filter events that haven't ended + 1 hour
+        this.futureEvents = this.eventList.filter(e => {
+          const eventTime = new Date(e.date).getTime();
+          return eventTime + oneHourMs > now;
+        });
+
         this.futureEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
       })
       .catch(err => {
@@ -111,5 +119,22 @@ export class FeedComponent {
       .catch(err => {
         this.messageService.showErrorMessage(`Unregistration failed: ${err.message}`, 5);
       });
+  }
+
+  /**
+   * Handles creation of an event.
+   */
+  onCreate() {
+    // TODO: Navigate to create event page
+    console.log('Create event');
+  }
+
+  /**
+   * Handles editing of an event.
+   * @param event the event to edit.
+   */
+  onEdit(event: Event) {
+    // TODO: Navigate to edit event page
+    console.log('Edit event:', event);
   }
 }

@@ -1,0 +1,26 @@
+<div class="table-container">
+  <!-- LEFT SEAT -->
+  <div
+    class="seat left"
+    [class.your-seat]="isCurrentUserSeat('left')"
+    [attr.title]="getSeatTitle('left')"
+    [style.background-image]="isOrganizer && leftSeat?.profilePicture ? 'url(' + leftSeat?.profilePicture + ')' : ''"
+    [style.background-size]="'cover'"
+    [style.background-position]="'center'"
+  ></div>
+
+  <!-- TABLE NUMBER -->
+  <div class="table-box">
+    <div class="table-number">{{ table.id }}</div>
+  </div>
+
+  <!-- RIGHT SEAT -->
+  <div
+    class="seat right"
+    [class.your-seat]="isCurrentUserSeat('right')"
+    [attr.title]="getSeatTitle('right')"
+    [style.background-image]="isOrganizer && rightSeat?.profilePicture ? 'url(' + rightSeat?.profilePicture + ')' : ''"
+    [style.background-size]="'cover'"
+    [style.background-position]="'center'"
+  ></div>
+</div>

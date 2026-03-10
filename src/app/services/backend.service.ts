@@ -277,6 +277,17 @@ export class BackendService {
 
 		return firstValueFrom(
 			this.http.get<MatchingResponseDto>(endpoint, this.httpOptions)
+	 * Fetches the next date for the current user in a specific event round.
+	 *
+	 * @param eventId - The ID of the event.
+	 * @param round - The current round number.
+	 * @returns A Promise resolving to a partial User object for the next date.
+	 */
+	getNextDate(eventId: string, round: number): Promise<Partial<User>> {
+		const endpoint = `${this.URL}/events/${eventId}/${round}/next-date`;
+
+		return firstValueFrom(
+			this.http.get<Partial<User>>(endpoint, this.httpOptions)
 		);
 	}
 
@@ -284,7 +295,23 @@ export class BackendService {
 	// REVIEW METHODS
 	// ===============================================================
 
+	/**
+	 * Sends a POST request to create a new review.
+	 *
+	 * @param eventId - The ID of the event being reviewed.
+	 * @param round - The current round number of the event.
+	 * @param dateId - The ID of the user receiving the review.
+	 * @param answers - Object mapping question IDs to answers.
+	 * @returns A Promise resolving to the server response message.
+	 */
+	createReview(eventId: string, round: number, dateId: string, answers: Record<string, any>): Promise<{ message: string }> {
+		const endpoint = `${this.URL}/reviews`;
+		const body = { eventId, round, dateId, answers };
 
+		return firstValueFrom(
+			this.http.post<{ message: string }>(endpoint, body, this.httpOptions)
+		);
+	}
 
 	// ===============================================================
 	// INTEREST METHODS

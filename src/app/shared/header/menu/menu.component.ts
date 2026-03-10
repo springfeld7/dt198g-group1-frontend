@@ -10,8 +10,9 @@ import { AuthService } from '../../../services/auth.service';
   styleUrl: './menu.component.scss'
 })
 export class MenuComponent {
-  isOpen = false;
+  isOpen: boolean = false;
   authService: AuthService = inject(AuthService);
+  isAdmin: boolean = this.authService.getIsAdmin();
 
   toggleMenu() {
     this.isOpen = !this.isOpen;
