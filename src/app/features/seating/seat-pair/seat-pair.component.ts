@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { type Seat, type Table } from '../seating.component';
+import { Table } from '../../../models/table';
+import { Seat } from '../../../models/seat';
 
 @Component({
   selector: 'app-seat-pair',

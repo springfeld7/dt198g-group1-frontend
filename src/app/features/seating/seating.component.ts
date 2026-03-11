@@ -1,109 +1,44 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SeatPairComponent } from './seat-pair/seat-pair.component';
 import { AuthService } from '../../services/auth.service';
-
-export interface Seat {
-  id: string;
-  position: 'left' | 'right';
-  tableNumber: number;
-  userId?: string;
-  userName?: string;
-  profilePicture?: string;
-}
-
-export interface Table {
-  id: number;
-  seats: Seat[];
-}
+import { Table } from '../../models/table';
+import { Seat } from '../../models/seat';
 
 @Component({
   selector: 'app-seating',
   imports: [CommonModule, SeatPairComponent],
   templateUrl: './seating.component.html',
-  styleUrl: './seating.component.scss'
+  styleUrls: ['./seating.component.scss']
 })
-export class SeatingComponent {
+export class SeatingComponent implements OnInit {
+  @Input() maxSpots!: number;
+  @Input() tables: Table[] = [];
   isAdmin = false;
   currentUserId = '';
 
-  tables: Table[] = [
-    {
-      id: 1,
-      seats: [
-        { id: '1-left', position: 'left', tableNumber: 1 },
-        { id: '1-right', position: 'right', tableNumber: 1 }
-      ]
-    },
-    {
-      id: 2,
-      seats: [
-        { id: '2-left', position: 'left', tableNumber: 2 },
-        { id: '2-right', position: 'right', tableNumber: 2 }
-      ]
-    },
-    {
-      id: 3,
-      seats: [
-        { id: '3-left', position: 'left', tableNumber: 3 },
-        { id: '3-right', position: 'right', tableNumber: 3 }
-      ]
-    },
-    {
-      id: 4,
-      seats: [
-        { id: '4-left', position: 'left', tableNumber: 4 },
-        { id: '4-right', position: 'right', tableNumber: 4 }
-      ]
-    },
-    {
-      id: 5,
-      seats: [
-        { id: '5-left', position: 'left', tableNumber: 5, userId: 'user123', userName: 'You' },
-        { id: '5-right', position: 'right', tableNumber: 5 }
-      ]
-    },
-    {
-      id: 6,
-      seats: [
-        { id: '6-left', position: 'left', tableNumber: 6 },
-        { id: '6-right', position: 'right', tableNumber: 6 }
-      ]
-    },
-    {
-      id: 7,
-      seats: [
-        { id: '7-left', position: 'left', tableNumber: 7 },
-        { id: '7-right', position: 'right', tableNumber: 7 }
-      ]
-    },
-    {
-      id: 8,
-      seats: [
-        { id: '8-left', position: 'left', tableNumber: 8 },
-        { id: '8-right', position: 'right', tableNumber: 8 }
-      ]
-    },
-    {
-      id: 9,
-      seats: [
-        { id: '9-left', position: 'left', tableNumber: 9 },
-        { id: '9-right', position: 'right', tableNumber: 9 }
-      ]
-    },
-    {
-      id: 10,
-      seats: [
-        { id: '10-left', position: 'left', tableNumber: 10 },
-        { id: '10-right', position: 'right', tableNumber: 10 }
-      ]
-    }
-  ];
+  private authService = inject(AuthService);
 
-  constructor(private authService: AuthService) {}
-
+  /**
+   * Sets up the seating arrangement when the component initializes. It checks if the current user
+   * is an admin and retrieves the user ID. If no tables are provided by the parent component,
+   * it generates a default set of empty tables based on the maximum number of spots.
+   * Each table has two seats (left and right) that can be occupied by participants.
+   */
   ngOnInit(): void {
-    this.currentUserId = this.authService.getUserId()
-    this.isAdmin = this.authService.getIsAdmin()
+    this.currentUserId = this.authService.getUserId();
+    this.isAdmin = this.authService.getIsAdmin();
+
+    // If parent did not provide tables, generate default empty tables
+    if (!this.tables || this.tables.length === 0) {
+      const numTables = Math.ceil(this.maxSpots / 2);
+      this.tables = Array.from({ length: numTables }, (_, i) => ({
+        tableNumber: i + 1,
+        seats: [
+          { position: 'left', tableNumber: i + 1 },
+          { position: 'right', tableNumber: i + 1 }
+        ]
+      }));
+    }
   }
 }

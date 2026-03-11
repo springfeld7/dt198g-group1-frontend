@@ -5,6 +5,9 @@ import { MessageService } from '../../services/message.service';
 import { Event } from '../../models/event';
 import { SeatingComponent } from '../seating/seating.component';
 import { MatchedPair, MatchingResponseDto, Snapshot } from '../../models/api/matching-response.dto';
+import { Table } from '../../models/table';
+import { Seat } from '../../models/seat';
+
 
 @Component({
   selector: 'app-organizer-event',
@@ -18,33 +21,35 @@ export class OrganizerEventComponent implements OnInit {
   private backendService = inject(BackendService);
   private messageService = inject(MessageService);
 
-  private eventId!: string;
-  private event?: Event;
-  private currentRound: number | null = null;
-  private roundMatches: Record<number, MatchedPair[]> = {};
-  private roundSnapshots: Record<number, Snapshot[]> = {};
+  eventId!: string;
+  event?: Event;
+  currentRound: number | null = null;
+  roundMatches: Record<number, MatchedPair[]> = {};
+  roundSnapshots: Record<number, Snapshot[]> = {};
+  tables: Table[] = [];
+
+  ngOnInit(): void {
+    this.eventId = this.route.snapshot.paramMap.get('eventId')!;
+    this.loadEvent();
+  }
 
   /**
-   * Loads the event from the backend when the component initializes,
-   * then generates matches for the first round.
+   * Loads the event from the backend, stores it in component state,
+   * and generates matches for the first round.
    */
-  async ngOnInit(): Promise<void> {
-    this.eventId = this.route.snapshot.paramMap.get('eventId')!;
-
+  private async loadEvent() {
     try {
       this.event = await this.backendService.getEventById(this.eventId);
       console.log('Loaded event:', this.event);
 
+      this.generateMatches(1);
     } catch (error) {
       console.error('Failed to load event:', error);
-
       this.messageService.showErrorMessage(
         'Failed to load the event: ' + (error instanceof Error ? error.message : 'Unknown error'),
         5
       );
     }
-
-    this.generateMatches(1);
   }
 
   /**
@@ -63,6 +68,9 @@ export class OrganizerEventComponent implements OnInit {
         this.roundSnapshots[round] = response.snapshots;
         this.currentRound = round;
 
+        // Build seating tables with matched participants
+        this.buildTablesFromMatches(response.matchedPairs);
+
         this.messageService.showSuccessMessage(
           `Matches for round ${round} generated successfully!`,
           5
@@ -75,5 +83,38 @@ export class OrganizerEventComponent implements OnInit {
           5
         );
       });
+  }
+
+  /**
+   * Converts matched pairs into tables and seats for the seating component.
+   */
+  private buildTablesFromMatches(matches: MatchedPair[]): void {
+    if (!this.event) return;
+
+    const maxSpots = this.event.maxSpots;
+    const numTables = Math.ceil(maxSpots / 2);
+
+    this.tables = Array.from({ length: numTables }, (_, i) => {
+      const match = matches[i];
+
+      const leftSeat: Seat = { position: 'left', tableNumber: i + 1 };
+      const rightSeat: Seat = { position: 'right', tableNumber: i + 1 };
+
+      if (match) {
+        // Assign man and woman to seats (can swap if needed)
+        leftSeat.userId = match.man;
+        leftSeat.userName = `User ${match.man}`; // optionally replace with actual name
+        leftSeat.profilePicture = `/resources/img/users/${match.man}.jpg`;
+
+        rightSeat.userId = match.woman;
+        rightSeat.userName = `User ${match.woman}`;
+        rightSeat.profilePicture = `/resources/img/users/${match.woman}.jpg`;
+      }
+
+      return {
+        tableNumber: i + 1,
+        seats: [leftSeat, rightSeat]
+      };
+    });
   }
 }

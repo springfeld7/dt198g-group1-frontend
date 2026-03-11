@@ -1,1 +1,5 @@
-<app-seating />
+<app-seating
+  *ngIf="event"
+  [maxSpots]="event?.maxSpots || 0"
+  [tables]="tables"
+></app-seating>
