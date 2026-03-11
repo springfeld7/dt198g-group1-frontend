@@ -1,1 +1,5 @@
-<p>organizer-event.component works!</p>
+<app-seating
+  *ngIf="event"
+  [maxSpots]="event.maxSpots || 0"
+  [tables]="tables"
+></app-seating>

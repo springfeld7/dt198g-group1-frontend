@@ -1,26 +1,20 @@
 <div class="table-container">
   <!-- LEFT SEAT -->
-  <div
-    class="seat left"
-    [class.your-seat]="isCurrentUserSeat('left')"
-    [attr.title]="getSeatTitle('left')"
-    [style.background-image]="isOrganizer && leftSeat?.profilePicture ? 'url(' + leftSeat?.profilePicture + ')' : ''"
-    [style.background-size]="'cover'"
-    [style.background-position]="'center'"
-  ></div>
+  <div class="seat left" [class.your-seat]="isCurrentUserSeat('left')" [attr.title]="getSeatTitle('left')">
+    <img *ngIf="getLeftSeatPicture()" [src]="getLeftSeatPicture()" alt="Profile" (error)="handleImageError($event)">
+    <!-- Feedback dot -->
+    <div *ngIf="leftSeat?.hasFeedback" class="feedback-dot"></div>
+  </div>
 
   <!-- TABLE NUMBER -->
   <div class="table-box">
-    <div class="table-number">{{ table.id }}</div>
+    <div class="table-number">{{ table.tableNumber }}</div>
   </div>
 
   <!-- RIGHT SEAT -->
-  <div
-    class="seat right"
-    [class.your-seat]="isCurrentUserSeat('right')"
-    [attr.title]="getSeatTitle('right')"
-    [style.background-image]="isOrganizer && rightSeat?.profilePicture ? 'url(' + rightSeat?.profilePicture + ')' : ''"
-    [style.background-size]="'cover'"
-    [style.background-position]="'center'"
-  ></div>
+  <div class="seat right" [class.your-seat]="isCurrentUserSeat('right')" [attr.title]="getSeatTitle('right')">
+    <img *ngIf="getRightSeatPicture()" [src]="getRightSeatPicture()" alt="Profile" (error)="handleImageError($event)">
+    <!-- Feedback dot -->
+    <div *ngIf="rightSeat?.hasFeedback" class="feedback-dot"></div>
+  </div>
 </div>

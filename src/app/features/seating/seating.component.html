@@ -1,21 +1,18 @@
 <div class="seating-container">
 
   <div class="tables-grid">
-    <div class="row" *ngFor="let row of [0, 1, 2, 3, 4]">
-      <app-seat-pair 
-        *ngFor="let table of tables.slice(row * 2, row * 2 + 2)" 
-        [table]="table"
-        [isOrganizer]="isAdmin"
-        [currentUserId]="currentUserId">
+    <div class="row" *ngFor="let row of tables | slice:0:tables.length; let rowIndex = index">
+      <app-seat-pair *ngFor="let table of tables.slice(rowIndex * 2, rowIndex * 2 + 2)" [table]="table"
+        [isOrganizer]="isAdmin" [currentUserId]="currentUserId">
       </app-seat-pair>
     </div>
   </div>
-  
-    <ng-container *ngIf="!isAdmin">
+
+  <ng-container *ngIf="!isAdmin">
     <div class="entrance">
       <div></div>
     </div>
-    
+
     <div class="info">
       <div class="info-item">
         <div class="seat-icon your-seat"></div>
