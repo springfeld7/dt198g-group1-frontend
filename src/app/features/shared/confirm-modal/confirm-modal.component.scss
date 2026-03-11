@@ -65,3 +65,126 @@
         }
     }
 }
+
+.end-of-date-modal {
+  background-color: white;
+  color: white;
+
+  .modal-footer {
+    display: flex;
+    gap: 1rem; // space between buttons
+
+    button {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8pt;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s ease;
+
+      &:hover {
+        filter: brightness(0.85);
+        transform: translateY(-1pt);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+
+      &.btn-danger {
+        background-color: #4caf50; // Confirm = green
+        color: white;
+        order: 1; // left side
+      }
+
+      &.btn-secondary {
+        background-color: #ff4d4d; // Deny = red
+        color: white;
+        margin-left: auto; // push to right
+        order: 2;
+      }
+    }
+  }
+}
+
+.end-of-date-modal {
+  background-color: white;
+  color: white;
+
+  .modal-footer {
+    display: flex;
+    gap: 1rem; // space between buttons
+
+    button {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8pt;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s ease;
+
+      &:hover {
+        filter: brightness(0.85);
+        transform: translateY(-1pt);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+
+      &.btn-danger {
+        background-color: #4caf50; // Confirm = green
+        color: white;
+        order: 1; // left side
+      }
+
+      &.btn-secondary {
+        background-color: #ff4d4d; // Deny = red
+        color: white;
+        margin-left: auto; // push to right
+        order: 2;
+      }
+    }
+  }
+}
+
+.end-of-date-modal {
+  background-color: white;
+  color: white;
+
+  .modal-footer {
+    display: flex;
+    gap: 1rem; // space between buttons
+
+    button {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8pt;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s ease;
+
+      &:hover {
+        filter: brightness(0.85);
+        transform: translateY(-1pt);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+
+      &.btn-danger {
+        background-color: #4caf50; // Confirm = green
+        color: white;
+        order: 1; // left side
+      }
+
+      &.btn-secondary {
+        background-color: #ff4d4d; // Deny = red
+        color: white;
+        margin-left: auto; // push to right
+        order: 2;
+      }
+    }
+  }
+}
