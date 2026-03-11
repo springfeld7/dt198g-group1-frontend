@@ -30,8 +30,34 @@
     border-color: #5fa318;
   }
 
-  &.left { order: 1; }
-  &.right { order: 3; }
+  &.left {
+    order: 1;
+  }
+
+  &.right {
+    order: 3;
+  }
+
+  position: relative; // needed for dot positioning
+
+  .feedback-dot {
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -2px; // slightly below the seat circle
+    left: 90%;
+    transform: translateX(-50%);
+  }
+}
+
+.seat img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
 }
 
 .table-box {

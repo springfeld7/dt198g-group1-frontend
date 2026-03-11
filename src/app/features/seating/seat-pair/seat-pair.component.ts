@@ -1,18 +1,21 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Table } from '../../../models/table';
 import { Seat } from '../../../models/seat';
+import { BackendService } from '../../../services/backend.service';
 
 @Component({
   selector: 'app-seat-pair',
   imports: [CommonModule],
   templateUrl: './seat-pair.component.html',
-  styleUrl: './seat-pair.component.scss'
+  styleUrls: ['./seat-pair.component.scss']
 })
 export class SeatPairComponent {
   @Input() table!: Table;
   @Input() isOrganizer = false;
   @Input() currentUserId: string = '';
+
+  private backendService = inject(BackendService);
 
   isCurrentUserSeat(position: 'left' | 'right'): boolean {
     const seat = this.getSeatByPosition(position);
@@ -21,14 +24,8 @@ export class SeatPairComponent {
 
   getSeatTitle(position: 'left' | 'right'): string {
     const seat = this.getSeatByPosition(position);
-    if (!seat?.userId) {
-      return 'Empty seat';
-    }
-
-    if (seat.userId === this.currentUserId) {
-      return 'Your seat';
-    }
-
+    if (!seat?.userId) return 'Empty seat';
+    if (seat.userId === this.currentUserId) return 'Your seat';
     return 'Occupied seat';
   }
 
@@ -37,10 +34,40 @@ export class SeatPairComponent {
   }
 
   get leftSeat(): Seat | undefined {
-    return this.table?.seats.find(s => s.position === 'left');
+    return this.getSeatByPosition('left');
   }
 
   get rightSeat(): Seat | undefined {
-    return this.table?.seats.find(s => s.position === 'right');
+    return this.getSeatByPosition('right');
+  }
+
+  // seat-pair.component.ts
+  getLeftSeatPicture(): string | null {
+    return this.isOrganizer && this.leftSeat?.userId
+      ? this.getProfilePicUrl(this.leftSeat.userId)
+      : null;
+  }
+
+  getRightSeatPicture(): string | null {
+    return this.isOrganizer && this.rightSeat?.userId
+      ? this.getProfilePicUrl(this.rightSeat.userId)
+      : null;
+  }
+
+  /**
+   * Returns the profile picture URL for a given user ID.
+   * @param userId - The user ID (non-nullable)
+   */
+  getProfilePicUrl(userId: string | undefined): string {
+    if (!userId) return '/assets/default-profile.jpg';
+    return this.backendService.getUserPictureUrl(userId);
+  }
+
+  /**
+   * Fallback for image loading errors.
+   */
+  handleImageError(event: Event): void {
+    const imgEl = event.target as HTMLImageElement;
+    imgEl.src = '/assets/default-profile.jpg';
   }
 }

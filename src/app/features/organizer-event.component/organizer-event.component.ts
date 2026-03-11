@@ -1,4 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import { MessageService } from '../../services/message.service';
@@ -11,7 +12,7 @@ import { Seat } from '../../models/seat';
 
 @Component({
   selector: 'app-organizer-event',
-  imports: [SeatingComponent],
+  imports: [CommonModule, SeatingComponent],
   templateUrl: './organizer-event.component.html',
   styleUrls: ['./organizer-event.component.scss']
 })
@@ -90,7 +91,7 @@ export class OrganizerEventComponent implements OnInit {
    */
   private buildTablesFromMatches(matches: MatchedPair[]): void {
     if (!this.event) return;
-
+    console.log('Building tables from matches:', matches);
     const maxSpots = this.event.maxSpots;
     const numTables = Math.ceil(maxSpots / 2);
 
