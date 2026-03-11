@@ -20,16 +20,16 @@ export class SignupComponent {
   private router = inject(Router);
 
   newUser: UserRegistration = {
-    username: "username",
-    password: "password",
-    repeatPassword: "password",
-    firstName: "firstname",
-    surname: "surname",
-    email: "your@email.com",
-    phone: "phone",
-    location: "location",
+    username: "",
+    password: "",
+    repeatPassword: "",
+    firstName: "",
+    surname: "",
+    email: "",
+    phone: "",
+    location: "",
     gender: "woman",
-    age: 66,
+    age: 18,
     interests: [] as string[]
   };
   
