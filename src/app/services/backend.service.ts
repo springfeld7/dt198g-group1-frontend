@@ -14,6 +14,8 @@ import { UserRegistration } from '../models/api/user-registration.dto';
 import { DeleteEventResponse } from '../models/api/delete-event-response.dto';
 import { UserUpdateData } from '../models/api/user-update.dto';
 import { MatchingResponseDto } from '../models/api/matching-response.dto';
+import { Match } from '../models/match';
+import { NextDateResponseDto } from '../models/api/nextdate-response.dto';
 
 
 @Injectable({
@@ -277,17 +279,40 @@ export class BackendService {
 
 		return firstValueFrom(
 			this.http.get<MatchingResponseDto>(endpoint, this.httpOptions)
-	 * Fetches the next date for the current user in a specific event round.
+
+		);
+	}
+
+	/**
+	 * Retrieves the next date for the current participant in a given round of an event.
 	 *
 	 * @param eventId - The ID of the event.
-	 * @param round - The current round number.
-	 * @returns A Promise resolving to a partial User object for the next date.
+	 * @param round - The round number (1, 2, or 3).
+	 * @returns {Promise<NextDateResponseDto>} A promise resolving to the next match including
+	 * user info, table number, and participant's seat.
 	 */
-	getNextDate(eventId: string, round: number): Promise<Partial<User>> {
+	getNextDate(eventId: string, round: number): Promise<NextDateResponseDto> {
 		const endpoint = `${this.URL}/events/${eventId}/${round}/next-date`;
 
 		return firstValueFrom(
-			this.http.get<Partial<User>>(endpoint, this.httpOptions)
+			this.http.get<NextDateResponseDto>(endpoint, this.httpOptions)
+		);
+	}
+
+	/**
+	 * Saves finalized matches and seating assignments for a specific round.
+	 *
+	 * @param eventId - The ID of the event.
+	 * @param round - The round number (1, 2, or 3).
+	 * @param matches - Array of match objects containing participants and seating.
+	 * @returns A Promise resolving to the updated event.
+	 */
+	saveRoundMatches(eventId: string, round: number, matches: Match[]): Promise<Event> {
+
+		const endpoint = `${this.URL}/events/${eventId}/${round}/matches`;
+
+		return firstValueFrom(
+			this.http.post<Event>(endpoint, { matches }, this.httpOptions)
 		);
 	}
 
