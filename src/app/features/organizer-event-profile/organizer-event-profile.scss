@@ -16,29 +16,26 @@
   z-index: 1001;
   width: 500px;
   text-align: center;
+  max-height: 90vh;           // cannot be taller than 90% of viewport
+  overflow-y: auto;  
 
   .close-btn {
     position: absolute;
     top: 10px;
-    /* a bit lower */
     right: 10px;
-    /* a bit more inside */
     border: none;
     background: none;
     color: #c41e3a;
-    /* make it visible */
     font-size: 1.4rem;
     font-weight: bold;
     cursor: pointer;
     z-index: 1010;
-    /* make sure above content */
   }
 }
 
 .profile-container {
-  padding: 40px 20px;
+  padding-top: 12px;
   max-width: 600px;
-  margin: 0 auto;
 }
 
 .profile-header {
@@ -134,8 +131,9 @@
 
 .reviews-separator {
   height: 2px;
-  background-color: #e63946; /* red line */
-  margin: 16px 0;
+  background-color: #e63946;
+  margin-top: 8px;
+  margin-bottom: 16px;
 }
 
 .reviews-title {
@@ -143,37 +141,61 @@
   margin-bottom: 16px;
 }
 
+/* Grid layout for proper vertical line centering */
 .reviews-columns {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr; /* left / center line / right */
+  gap: 20px;
   position: relative;
 }
 
+/* Left and right columns flex */
 .reviews-column {
-  width: 45%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px; /* spacing matches profile pics */
 }
 
+/* Vertical line container */
 .reviews-center-line {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+/* Vertical red line */
+.reviews-center-line::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  background-color: #e63946;
+  z-index: 0;
+}
+
+/* Profile pics centered on the vertical line */
 .date-profile-pic {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin: 8px 0;
+  margin: 40px;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 1; /* ensures pic is on top of line */
 }
 
+/* Review item alignment */
 .review-item {
-  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
+/* Review answer spacing */
 .review-answer {
   margin: 2px 0;
 }
@@ -193,5 +215,23 @@
 
   .profile-info {
     width: 100%;
+  }
+
+  /* Stack reviews on mobile */
+  .reviews-columns {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .reviews-center-line {
+    margin: 16px 0;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .reviews-center-line::before {
+    display: none; /* hide vertical line on mobile */
   }
 }

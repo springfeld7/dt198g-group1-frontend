@@ -21,9 +21,9 @@ export class OrganizerEventProfileComponent {
   backendService = inject(BackendService);
 
   firstThreeQuestions = [
-    "Were you happy with your latest date?",
-    "Would you like to broaden your horizons?",
-    "Would you like to meet someone younger or older in your next date?"
+    { id: '6992ef88cd605d760113e407', text: 'Happy with date?', type: 'boolean' },
+    { id: '6992f0edcd605d760113e40c', text: 'Broaden horizons?', type: 'boolean' },
+    { id: '6992f118cd605d760113e40e', text: 'Age pref for next date?', type: 'multipleChoice', options: ['Younger', 'Older', 'Same Age or close'] }
   ];
 
   receivedReviews: Review[] = [];
@@ -39,7 +39,7 @@ export class OrganizerEventProfileComponent {
 
     if (event?._id) {
       try {
-        this.reviews = await this.getEventReviews(event._id);
+        await this.getEventReviews(event._id, user._id!);
       } catch (error) {
         console.error('Failed to fetch reviews:', error);
         this.reviews = null;
@@ -82,10 +82,31 @@ export class OrganizerEventProfileComponent {
         ...(res.secondRound || []),
         ...(res.thirdRound || []),
       ];
+      this.reviews = res;
 
       // Separate received vs given
       this.receivedReviews = allReviews.filter(r => r.dateId === userId);
       this.givenReviews = allReviews.filter(r => r.reviewer === userId);
+      for (const review of this.givenReviews) {
+        console.log('Given review:', review);
+      }
+      for (const review of this.receivedReviews) {
+        console.log('Received review:', review);  
+      }
+
     });
+  }
+
+  mapAnswer(q: { id: string; type: string; options?: string[] }, review: Review): string {
+    const raw = review.answers[q.id];
+    if (raw === undefined) return '-';
+
+    if (q.type === 'boolean') return raw === true ? 'Yes' : 'No';
+    if (q.type === 'multipleChoice' && q.options) {
+      const index = Number(raw); // convert "0"/"1"/"2" to number
+      return q.options[index] ?? '-';
+    }
+
+    return String(raw);
   }
 }
