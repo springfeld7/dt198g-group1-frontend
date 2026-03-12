@@ -14,6 +14,7 @@ export class ConfirmModalComponent {
   @Input() message = 'This action cannot be undone.';
   @Input() confirmText = 'Confirm';
   @Input() cancelText = 'Cancel';
+  @Input() modalClass: string = '';
 
   @Output() confirmed = new EventEmitter<boolean>();
 

@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
 import { Event } from '../models/event';
 import { Interest } from '../models/interest';
 import { Question } from '../models/question';
-import { Review } from '../models/review';
 import { User } from '../models/user';
 import { SharedContact } from '../models/shared-contact';
 import { LoginResponse } from '../models/api/login-response.dto';
@@ -28,7 +27,7 @@ export class BackendService {
 	readonly API_PATH = `/api/v${this.API_VERSION}`;
 	readonly URL = `${this.API_URL}${this.API_PATH}`;
 
-	// Http options to send with the request. 
+	// Http options to send with the request.
 	// Necessary for sending cookies with the request for authentication.
 	httpOptions = {
 		withCredentials: true
@@ -106,7 +105,7 @@ export class BackendService {
 
 	/**
 	 * Retrieves all users from the database.
-	 * 
+	 *
 	 * @returns {Promise<User[]>} A Promise resolving to an array of User objects.
 	 */
 	getAllUsers(): Promise<User[]> {
@@ -126,7 +125,7 @@ export class BackendService {
 
 	/**
 	 * Retrieves all shared contacts for a specific user.
-	 * 
+	 *
 	 * @param {string} id - The User ID to find matches for.
 	 * @returns {Promise<SharedContact[]>} A Promise resolving to an array of SharedContact objects.
 	 */
@@ -169,7 +168,7 @@ export class BackendService {
 
 	/**
 	 * Get all Events from the REST API.
-	 * 
+	 *
 	 * @return {Promise} A Promise that resolves to an array of events.
 	 */
 	getAllEvents(): Promise<Event[]> {
@@ -224,7 +223,7 @@ export class BackendService {
 
 	/**
 	 * Posts a new event to the database.
-	 * 
+	 *
 	 * @param {Partial<Event>} eventData - Object containing title, description, date, location, and maxSpots.
 	 * @returns {Promise<Event>} A Promise resolving to the newly created event.
 	 */
@@ -240,7 +239,7 @@ export class BackendService {
 
 	/**
 	 * Updates an existing event in the database.
-	 * 
+	 *
 	 * @param {string} id - The unique ID of the event to update.
 	 * @param {Partial<Event>} updates - The fields to update.
 	 * @returns {Promise<Event>} A Promise resolving to the updated event.
@@ -265,6 +264,33 @@ export class BackendService {
 
 		return firstValueFrom(this.http.delete<DeleteEventResponse>(endpoint, this.httpOptions));
 	}
+
+  /**
+   * Fetches all matches for a user at the end of an event.
+   * @param {string} eventId - The ID of the event.
+   * @returns {Promise<any>} A promise that resolves to the match data for the event.
+   */
+  getMatchesAtEnd(eventId: string): Promise<any[]> {
+    const endpoint = `${this.URL}/events/${eventId}/end/matches`;
+    return firstValueFrom(this.http.get<any[]>(endpoint, this.httpOptions));
+  }
+
+
+  /**
+   * Updates the like status of a match for a specific user.
+   * @param {string} userId - The unique ID of the user.
+   * @param {string} matchId - The ID of the match to update.
+   * @param {boolean} like - Whether the user likes the match (true) or not (false).
+   * @returns {Promise<Match>} A promise that resolves to the updated match data.
+   */
+  toggleLike(userId: string,matchId : string,like: boolean): Promise<Match> {
+    const endpoint = `${this.URL}/users/${userId}/matches`;
+    const body = {
+      matchId: matchId,
+      liked: like
+    };
+    return firstValueFrom(this.http.put<Match>(endpoint, body,this.httpOptions))
+  }
 
 	/**
 	 * Generates matches for a specific round of an event along with snapshots for visualization.
