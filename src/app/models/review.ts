@@ -1,7 +1,7 @@
 export interface Review {
-    _id: string;
+    _id?: string;
     reviewer: string;
-    eventId: string;
+    eventId?: string;
     round: number;
     dateId: string;
     answers: { [questionId: string]: boolean | string };

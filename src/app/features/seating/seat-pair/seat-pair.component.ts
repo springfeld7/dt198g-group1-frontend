@@ -1,19 +1,24 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, Input, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Table } from '../../../models/table';
 import { Seat } from '../../../models/seat';
 import { BackendService } from '../../../services/backend.service';
+import { Event as EventModel } from '../../../models/event';
+import { OrganizerEventProfileComponent } from '../../organizer-event-profile/organizer-event-profile';
 
 @Component({
   selector: 'app-seat-pair',
-  imports: [CommonModule],
+  imports: [CommonModule, OrganizerEventProfileComponent],
   templateUrl: './seat-pair.component.html',
   styleUrls: ['./seat-pair.component.scss']
 })
 export class SeatPairComponent {
+  @Input() event!: EventModel;
   @Input() table!: Table;
   @Input() isOrganizer = false;
   @Input() currentUserId: string = '';
+
+  @ViewChild(OrganizerEventProfileComponent) profileModal!: OrganizerEventProfileComponent;
 
   private backendService = inject(BackendService);
 
@@ -69,5 +74,14 @@ export class SeatPairComponent {
   handleImageError(event: Event): void {
     const imgEl = event.target as HTMLImageElement;
     imgEl.src = '/assets/default-profile.jpg';
+  }
+
+  /**
+ * Open a profile.
+ */
+  openProfile(seat: Seat | undefined): void {
+    if (seat?.user && this.event) {
+      this.profileModal.open(seat.user, this.event);
+    }
   }
 }

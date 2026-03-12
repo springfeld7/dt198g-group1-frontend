@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import { MessageService } from '../../services/message.service';
-import { Event } from '../../models/event';
+import { Event as EventModel } from '../../models/event';
 import { SeatingComponent } from '../seating/seating.component';
 import { MatchedPair, MatchingResponseDto, Snapshot } from '../../models/api/matching-response.dto';
 import { Table } from '../../models/table';
 import { Seat } from '../../models/seat';
+import { User } from '../../models/user';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class OrganizerEventComponent implements OnInit {
   private messageService = inject(MessageService);
 
   eventId!: string;
-  event?: Event;
+  event?: EventModel;
   currentRound: number | null = null;
   roundMatches: Record<number, MatchedPair[]> = {};
   roundSnapshots: Record<number, Snapshot[]> = {};
@@ -102,14 +103,25 @@ export class OrganizerEventComponent implements OnInit {
       const rightSeat: Seat = { position: 'right', tableNumber: i + 1 };
 
       if (match) {
-        // Assign man and woman to seats (can swap if needed)
+
+        // Find full User objects in the event
+        const manUser = this.event?.registeredMen.find(
+          (u): u is User => typeof u !== 'string' && u._id === match.man
+        );
+        const womanUser = this.event?.registeredWomen.find(
+          (u): u is User => typeof u !== 'string' && u._id === match.woman
+        );
+
+        // Assign man and woman to seats
         leftSeat.userId = match.man;
-        leftSeat.userName = `User ${match.man}`; // optionally replace with actual name
+        leftSeat.userName = `User ${match.man}`;
         leftSeat.profilePicture = `/resources/img/users/${match.man}.jpg`;
+        leftSeat.user = manUser;
 
         rightSeat.userId = match.woman;
         rightSeat.userName = `User ${match.woman}`;
         rightSeat.profilePicture = `/resources/img/users/${match.woman}.jpg`;
+        rightSeat.user = womanUser;
       }
 
       return {

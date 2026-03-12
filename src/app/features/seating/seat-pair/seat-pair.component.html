@@ -1,9 +1,15 @@
 <div class="table-container">
-  <!-- LEFT SEAT -->
-  <div class="seat left" [class.your-seat]="isCurrentUserSeat('left')" [attr.title]="getSeatTitle('left')">
-    <img *ngIf="getLeftSeatPicture()" [src]="getLeftSeatPicture()" alt="Profile" (error)="handleImageError($event)">
-    <!-- Feedback dot -->
-    <div *ngIf="leftSeat?.hasFeedback" class="feedback-dot"></div>
+  <!-- LEFT SEAT WRAPPER -->
+  <div class="seat-wrapper left">
+    <div class="seat" [class.seat-picture]="isOrganizer" [class.your-seat]="isCurrentUserSeat('left')"
+      [attr.title]="getSeatTitle('left')">
+
+      <img *ngIf="isOrganizer && getLeftSeatPicture()" [src]="getLeftSeatPicture()" alt="Profile"
+        (error)="handleImageError($event)" (click)="openProfile(leftSeat)">
+    </div>
+
+    <!-- Feedback dot only for profile-picture seats -->
+    <div *ngIf="isOrganizer && leftSeat?.hasFeedback" class="feedback-dot"></div>
   </div>
 
   <!-- TABLE NUMBER -->
@@ -11,10 +17,17 @@
     <div class="table-number">{{ table.tableNumber }}</div>
   </div>
 
-  <!-- RIGHT SEAT -->
-  <div class="seat right" [class.your-seat]="isCurrentUserSeat('right')" [attr.title]="getSeatTitle('right')">
-    <img *ngIf="getRightSeatPicture()" [src]="getRightSeatPicture()" alt="Profile" (error)="handleImageError($event)">
-    <!-- Feedback dot -->
-    <div *ngIf="rightSeat?.hasFeedback" class="feedback-dot"></div>
+  <!-- RIGHT SEAT WRAPPER -->
+  <div class="seat-wrapper right">
+    <div class="seat" [class.seat-picture]="isOrganizer" [class.your-seat]="isCurrentUserSeat('right')"
+      [attr.title]="getSeatTitle('right')">
+
+      <img *ngIf="isOrganizer && getRightSeatPicture()" [src]="getRightSeatPicture()" alt="Profile"
+        (error)="handleImageError($event)" (click)="openProfile(rightSeat)">
+    </div>
+
+    <!-- Feedback dot only for profile-picture seats -->
+    <div *ngIf="isOrganizer && rightSeat?.hasFeedback" class="feedback-dot"></div>
   </div>
 </div>
+<app-organizer-event-profile #profileModal></app-organizer-event-profile>

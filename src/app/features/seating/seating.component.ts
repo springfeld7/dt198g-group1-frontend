@@ -4,6 +4,7 @@ import { SeatPairComponent } from './seat-pair/seat-pair.component';
 import { AuthService } from '../../services/auth.service';
 import { Table } from '../../models/table';
 import { Seat } from '../../models/seat';
+import { Event as EventModel } from '../../models/event';
 
 @Component({
   selector: 'app-seating',
@@ -12,6 +13,7 @@ import { Seat } from '../../models/seat';
   styleUrls: ['./seating.component.scss']
 })
 export class SeatingComponent implements OnInit {
+  @Input() event!: EventModel;
   @Input() maxSpots!: number;
   @Input() tables: Table[] = [];
   isAdmin = false;

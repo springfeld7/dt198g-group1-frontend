@@ -16,6 +16,7 @@ import { UserUpdateData } from '../models/api/user-update.dto';
 import { MatchingResponseDto } from '../models/api/matching-response.dto';
 import { Match } from '../models/match';
 import { NextDateResponseDto } from '../models/api/nextdate-response.dto';
+import { EventReviewsResponse } from '../models/api/getreview-response.dto';
 
 
 @Injectable({
@@ -330,11 +331,33 @@ export class BackendService {
 	 * @returns A Promise resolving to the server response message.
 	 */
 	createReview(eventId: string, round: number, dateId: string, answers: Record<string, any>): Promise<{ message: string }> {
-		const endpoint = `${this.URL}/reviews`;
+		const endpoint = `${this.URL}/review`;
 		const body = { eventId, round, dateId, answers };
 
 		return firstValueFrom(
-			this.http.post<{ message: string }>(endpoint, body, this.httpOptions)
+			this.http.post<{ message: string; reviewId: string }>(endpoint, body, this.httpOptions)
+		);
+	}
+
+	/**
+	 * Retrieve all reviews for the current user within a specific event.
+	 *
+	 * This method calls the backend endpoint that returns the reviews associated
+	 * with the authenticated user for each round of the given event.
+	 * The response groups reviews by round (`firstRound`, `secondRound`, `thirdRound`).
+	 *
+	 * @param eventId - The unique identifier of the event whose reviews should be fetched.
+	 * @param userId - The unique identifier of the user.
+	 *
+	 * @returns A promise resolving to an {@link EventReviewsResponse} object containing
+	 * the reviews for each round of the event. Each round may contain an array of reviews
+	 * or `null` if no reviews exist for that round.
+	 */
+	getEventReviews(eventId: string, userId: string): Promise<EventReviewsResponse> {
+		const endpoint = `${this.URL}/events/${eventId}/reviews/${userId}`;
+
+		return firstValueFrom(
+			this.http.get<EventReviewsResponse>(endpoint, this.httpOptions)
 		);
 	}
 

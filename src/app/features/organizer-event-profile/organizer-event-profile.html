@@ -1,0 +1,84 @@
+<!-- Modal backdrop -->
+<div class="modal-backdrop" *ngIf="isOpen" (click)="close()"></div>
+
+<!-- Modal window -->
+<div class="profile-modal" *ngIf="isOpen">
+  <button class="close-btn" (click)="close()">X</button>
+
+  <!-- Use your existing profile view -->
+  <div class="profile-container" *ngIf="user">
+    <div class="profile-header">
+      <img class="profile-picture" [src]="getProfilePicUrl(user._id)" alt="Profile picture">
+      <div class="profile-info">
+        <div class="info-item">
+          <p class="value">{{ user.firstName }} {{ user.surname }}</p>
+          <h3 class="label">Name</h3>
+        </div>
+        <div class="info-item">
+          <p class="value">{{ user.age }}</p>
+          <h3 class="label">Age</h3>
+        </div>
+        <div class="info-item">
+          <p class="value">{{ user.email }}</p>
+          <h3 class="label">Mail</h3>
+        </div>
+        <div class="info-item">
+          <p class="value">{{ user.phone }}</p>
+          <h3 class="label">Phone</h3>
+        </div>
+        <div class="info-item">
+          <p class="value">{{ user.location }}</p>
+          <h3 class="label">Location</h3>
+        </div>
+        <div class="interests-item" *ngIf="user.interests?.length">
+          <h3 class="label">Interests</h3>
+          <div class="interests-list">
+            <p *ngFor="let interest of user.interests" class="interest-tag">{{ interest.name }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reviews Section -->
+<div class="reviews-section" *ngIf="reviews && (reviews.firstRound || reviews.secondRound || reviews.thirdRound)">
+  <!-- Red separator line -->
+  <div class="reviews-separator"></div>
+
+  <h2 class="reviews-title">Reviews</h2>
+
+  <div class="reviews-columns">
+    <div class="reviews-column received">
+      <h3>Received</h3>
+      <ng-container *ngFor="let review of receivedReviews">
+        <div class="review-item">
+          <p class="review-answer" *ngFor="let q of firstThreeQuestions; let i = index">
+            {{ review.answers[q] }}
+          </p>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Center line with date profile pictures -->
+    <div class="reviews-center-line">
+      <ng-container *ngFor="let review of receivedReviews">
+        <img 
+          class="date-profile-pic" 
+          [src]="getProfilePicUrl(review.dateId)" 
+          alt="Date profile">
+      </ng-container>
+    </div>
+
+    <div class="reviews-column given">
+      <h3>Given</h3>
+      <ng-container *ngFor="let review of givenReviews">
+        <div class="review-item">
+          <p class="review-answer" *ngFor="let q of firstThreeQuestions; let i = index">
+            {{ review.answers[q] }}
+          </p>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+</div>

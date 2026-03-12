@@ -15,6 +15,14 @@
   box-sizing: border-box;
 }
 
+/* Wrapper around seat for dot positioning */
+.seat-wrapper {
+  position: relative; // reference for feedback dot
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .seat {
   width: clamp(16px, 3.5vw, 36px);
   height: clamp(16px, 3.5vw, 36px);
@@ -38,26 +46,42 @@
     order: 3;
   }
 
-  position: relative; // needed for dot positioning
+  &.seat-picture {
+    background: none;
+    border: none;
+    overflow: hidden;
+  }
 
-  .feedback-dot {
-    width: 10px;
-    height: 10px;
-    background-color: red;
+  img {
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
-    position: absolute;
-    bottom: -2px; // slightly below the seat circle
-    left: 90%;
-    transform: translateX(-50%);
+    object-fit: cover;
+    display: block;
   }
 }
 
-.seat img {
-  width: 100%;
-  height: 100%;
+/* Feedback dot moved outside the seat */
+.seat-wrapper .feedback-dot {
+  width: 10px;
+  height: 10px;
+  background-color: red;
   border-radius: 50%;
-  object-fit: cover;
-  display: block;
+  position: absolute;
+  bottom: -3px; /* slightly outside the seat */
+  right: -3px;  /* bottom-right corner */
+}
+
+.seat-wrapper.left {
+  order: 1;
+}
+
+.table-box {
+  order: 2; // already exists
+}
+
+.seat-wrapper.right {
+  order: 3;
 }
 
 .table-box {
