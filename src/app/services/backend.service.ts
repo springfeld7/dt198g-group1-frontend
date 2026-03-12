@@ -268,11 +268,11 @@ export class BackendService {
   /**
    * Fetches all matches for a user at the end of an event.
    * @param {string} eventId - The ID of the event.
-   * @returns {Promise<Match>} A promise that resolves to the match data for the event.
+   * @returns {Promise<any>} A promise that resolves to the match data for the event.
    */
-  getMatchesAtEnd(eventId: string): Promise<Match[]> {
+  getMatchesAtEnd(eventId: string): Promise<any[]> {
     const endpoint = `${this.URL}/events/${eventId}/end/matches`;
-    return firstValueFrom(this.http.get<Match[]>(endpoint, this.httpOptions));
+    return firstValueFrom(this.http.get<any[]>(endpoint, this.httpOptions));
   }
 
 
