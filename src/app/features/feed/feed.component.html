@@ -24,4 +24,12 @@
     </app-event>
 
   </div>
+
+  <app-create-and-edit-event-modal
+    *ngIf="selectedEventFormId !== null"
+    [eventId]="selectedEventFormId"
+    (closeModal)="closeForm()"
+    (eventSaved)="onEventSaved($event)"
+    (eventDeleted)="onEventDeleted($event)"
+  ></app-create-and-edit-event-modal>
 </div>
