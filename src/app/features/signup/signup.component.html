@@ -22,7 +22,6 @@
 
     <label for="location">Location .(1,128)</label>
     <input #location="ngModel" id="location" name="location" maxlenght="128" type="text" [(ngModel)]="newUser.location" placeholder="Location" required [class.invalid]="location.value && location.invalid">
-
     <label for="gender">Gender</label>
     <label for="genderWoman" class="labelForRadio">
         <input id="genderWoman" name="gender" type="radio" [(ngModel)]="newUser.gender" required value="woman">
@@ -32,15 +31,15 @@
         <input id="genderMan" name="gender" type="radio" [(ngModel)]="newUser.gender" required value="man">
         Man
     </label>
-    
+
     <label for="age">Age 0-150</label>
     <input #age="ngModel" id="age" name="age" max="150" min="0" type="number" [(ngModel)]="newUser.age" placeholder="Age" required step="1" [class.invalid]="age.value && age.invalid">
-    
+
     <label for="interests">Interests (select 5)</label>
     <label class="labelForCheckbox" *ngFor="let interest of interests">
         <input type="checkbox" [value]="interest._id" (change)="onInterestChange($event, interest._id)" [checked]="newUser.interests.includes(interest._id)"/> {{ interest.name }}
     </label>
     <div class="error invalid" [class.hide]="!errorMessage">{{ errorMessage }}</div>
-    
+
     <button [disabled]="signupform.invalid || newUser.password !== newUser.repeatPassword || newUser.interests.length !== maxInterests">Submit</button>
 </form>

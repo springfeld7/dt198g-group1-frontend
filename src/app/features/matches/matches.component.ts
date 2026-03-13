@@ -2,7 +2,6 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BackendService } from '../../services/backend.service';
 import { AuthService } from '../../services/auth.service';
-import { User } from '../../models/user';
 import { MessageService } from '../../services/message.service';
 import { ConfirmModalComponent } from '../shared/confirm-modal/confirm-modal.component';
 import { SharedContact } from '../../models/shared-contact';
@@ -95,7 +94,7 @@ export class MatchesComponent implements OnInit {
 
   /**
    * Executes the deletion of a match after confirmation.
-   * 
+   *
    * @param matchId the ID of the match to delete.
    */
   private executeDelete(matchId: string) {
@@ -111,7 +110,7 @@ export class MatchesComponent implements OnInit {
 
   /**
    * Fetches the profile picture URL for a given user ID.
-   * 
+   *
    * @param id userId of the profile picture to fetch.
    * @returns the URL of the user's profile picture.
    */
@@ -129,7 +128,7 @@ export class MatchesComponent implements OnInit {
 
   /**
    * Checks if a match is new and unviewed by the user.
-   * @param id the ID of the match to check.
+   * @param match the ID of the match to check.
    * @returns whether the match with the given ID is new and unviewed by the user.
    */
   isNewSharedContact(match: SharedContact): boolean {
