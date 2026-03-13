@@ -1,4 +1,4 @@
-import { Component, Input, inject, ViewChild } from '@angular/core';
+import { Component, Input, Output, inject, ViewChild, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Table } from '../../../models/table';
 import { Seat } from '../../../models/seat';
@@ -17,6 +17,10 @@ export class SeatPairComponent {
   @Input() table!: Table;
   @Input() isOrganizer = false;
   @Input() currentUserId: string = '';
+  @Input() swapMode = false;
+  @Input() selectedMen: Seat[] = [];
+  @Input() selectedWomen: Seat[] = [];
+  @Output() seatSelectedForSwap = new EventEmitter<Seat>();
 
   @ViewChild(OrganizerEventProfileComponent) profileModal!: OrganizerEventProfileComponent;
 
@@ -77,11 +81,32 @@ export class SeatPairComponent {
   }
 
   /**
- * Open a profile.
- */
+   * Open a profile.
+   */
   openProfile(seat: Seat | undefined): void {
     if (seat?.user && this.event) {
       this.profileModal.open(seat.user, this.event);
+    }
+  }
+
+  /**
+   * Helper to check if a seat is selected for swap (used for CSS highlighting)
+   */
+  isSelectedForSwap(seat: Seat): boolean {
+    return this.selectedMen.includes(seat) || this.selectedWomen.includes(seat);
+  }
+
+  /**
+   * Handles the click event for a seat.
+   * @param seat The seat that was clicked.
+   */
+  seatClicked(seat: Seat | undefined): void {
+    if (this.swapMode) {
+      // In swap mode, select the seat instead of opening modal
+      this.seatSelectedForSwap.emit(seat);
+    } else {
+      // normal mode: open profile modal
+      this.openProfile(seat);
     }
   }
 }

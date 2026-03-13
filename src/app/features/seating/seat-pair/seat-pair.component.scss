@@ -107,3 +107,13 @@
   font-weight: bold;
   text-align: center;
 }
+
+.swap-selected-man {
+  border-radius: 50%;
+  border: 8px solid rgb(42, 42, 236);
+}
+
+.swap-selected-woman {
+  border-radius: 50%;
+  border: 8px solid rgb(236, 42, 140); // bright pink for women
+}

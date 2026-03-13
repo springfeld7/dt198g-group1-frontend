@@ -1,6 +1,22 @@
-<app-seating
-  *ngIf="event"
-  [maxSpots]="event.maxSpots || 0"
-  [tables]="tables"
-  [event]="event"
-></app-seating>
+<div class="round-tabs">
+  <button *ngFor="let r of [1,2,3]" [class.active]="currentRound === r" (click)="switchRound(r)">
+    Round {{ r }}
+  </button>
+</div>
+<div class="organizer-controls">
+  <!-- NORMAL MODE BUTTONS -->
+  <ng-container *ngIf="!swapMode">
+    <button (click)="toggleSwapMode()" class="blue-btn">Swap Matches</button>
+    <button (click)="finalizeMatches()" [disabled]="!currentRound" class="blue-btn">Start Round</button>
+    <button class="blue-btn">Matching Visualization</button>
+  </ng-container>
+
+  <!-- SWAP MODE BUTTONS -->
+  <ng-container *ngIf="swapMode">
+    <button (click)="swapSelectedSeats()" [disabled]="selectedMen.length !== 2 && selectedWomen.length !== 2" class="blue-btn">Swap</button>
+    <button (click)="saveSwapChanges()" class="green-btn">Save Changes</button>
+  </ng-container>
+</div>
+<app-seating *ngIf="event" [maxSpots]="event.maxSpots || 0" [tables]="tables" [event]="event" [swapMode]="swapMode"
+  [selectedMen]="selectedMen" [selectedWomen]="selectedWomen"
+  (seatSelectedForSwap)="onSeatSelectedForSwap($event)"></app-seating>

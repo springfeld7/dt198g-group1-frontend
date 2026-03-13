@@ -30,6 +30,10 @@ export class OrganizerEventComponent implements OnInit {
   roundSnapshots: Record<number, Snapshot[]> = {};
   tables: Table[] = [];
 
+  swapMode = false; // false = normal mode, true = swap mode
+  selectedMen: Seat[] = []; // selected men for swapping
+  selectedWomen: Seat[] = [];
+
   ngOnInit(): void {
     this.eventId = this.route.snapshot.paramMap.get('eventId')!;
     this.loadEvent();
@@ -129,5 +133,126 @@ export class OrganizerEventComponent implements OnInit {
         seats: [leftSeat, rightSeat]
       };
     });
+  }
+
+  /** Builds empty tables based on event.maxSpots */
+  private buildEmptyTables() {
+    if (!this.event) return;
+
+    const maxSpots = this.event.maxSpots;
+    const numTables = Math.ceil(maxSpots / 2);
+
+    this.tables = Array.from({ length: numTables }, (_, i) => {
+      const leftSeat: Seat = { position: 'left', tableNumber: i + 1 };
+      const rightSeat: Seat = { position: 'right', tableNumber: i + 1 };
+
+      return {
+        tableNumber: i + 1,
+        seats: [leftSeat, rightSeat]
+      };
+    });
+  }
+
+  /**
+   * Switches the current round and updates the seating arrangement
+   * based on the matches of the selected round.
+   * @param round The round number to switch to (1, 2, or 3)
+   */
+  switchRound(round: number) {
+    this.currentRound = round;
+
+    const matches = this.roundMatches[round];
+
+    if (matches && matches.length > 0) {
+      // build tables from matches
+      this.buildTablesFromMatches(matches);
+    } else {
+      // no matches yet, create empty tables
+      this.buildEmptyTables();
+    }
+  }
+  /**
+   * Toggles swap mode on or off. When swap mode is on, the organizer
+   * can select a pair of men or a pair of women and swap their seats.
+   */
+  toggleSwapMode() {
+    this.swapMode = !this.swapMode;
+    this.selectedMen = [];
+    this.selectedWomen = [];
+  }
+
+  /**
+   * Handle seat click in swap mode.
+   * Only allows two men OR two women selected at a time.
+   */
+  onSeatSelectedForSwap(seat: Seat) {
+    if (!this.swapMode || !seat.userId) return;
+
+    const isMan = seat.position === 'left';
+    const isWoman = seat.position === 'right';
+
+    if (isMan) {
+      if (this.selectedWomen.length) this.selectedWomen = [];
+      const index = this.selectedMen.indexOf(seat);
+      if (index >= 0) this.selectedMen.splice(index, 1);
+      else {
+        if (this.selectedMen.length >= 2) this.selectedMen.shift();
+        this.selectedMen.push(seat);
+      }
+    } else if (isWoman) {
+      if (this.selectedMen.length) this.selectedMen = [];
+      const index = this.selectedWomen.indexOf(seat);
+      if (index >= 0) this.selectedWomen.splice(index, 1);
+      else {
+        if (this.selectedWomen.length >= 2) this.selectedWomen.shift();
+        this.selectedWomen.push(seat);
+      }
+    }
+  }
+
+  /**
+   * Checks if a seat is currently selected for swapping
+   */
+  isSelectedForSwap(seat: Seat): boolean {
+    return this.selectedMen.includes(seat) || this.selectedWomen.includes(seat);
+  }
+
+
+  /**
+   * Swaps the currently selected seats of the same gender
+   */
+  swapSelectedSeats() {
+    if (this.selectedMen.length === 2) {
+      const [a, b] = this.selectedMen;
+      [a.user, b.user] = [b.user, a.user];
+      [a.userId, b.userId] = [b.userId, a.userId];
+      [a.userName, b.userName] = [b.userName, a.userName];
+      this.selectedMen = [];
+    }
+    if (this.selectedWomen.length === 2) {
+      const [a, b] = this.selectedWomen;
+      [a.user, b.user] = [b.user, a.user];
+      [a.userId, b.userId] = [b.userId, a.userId];
+      [a.userName, b.userName] = [b.userName, a.userName];
+      this.selectedWomen = [];
+    }
+  }
+
+  /**
+   * Ends swap mode and clears all selections
+   */
+  saveSwapChanges() {
+    this.swapMode = false;
+    this.selectedMen = [];
+    this.selectedWomen = [];
+    this.messageService.showSuccessMessage('Swap changes applied!', 3);
+  }
+
+  /**
+   * Finalizes the matches for the current round,
+   * and stores the finalized matches in the backend.
+   */
+  finalizeMatches() {
+
   }
 }

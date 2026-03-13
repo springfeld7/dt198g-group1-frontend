@@ -5,7 +5,7 @@
       [attr.title]="getSeatTitle('left')">
 
       <img *ngIf="isOrganizer && getLeftSeatPicture()" [src]="getLeftSeatPicture()" alt="Profile"
-        (error)="handleImageError($event)" (click)="openProfile(leftSeat)">
+        (error)="handleImageError($event)" (click)="seatClicked(leftSeat)" [class.swap-selected-man]="isSelectedForSwap(leftSeat!)">
     </div>
 
     <!-- Feedback dot only for profile-picture seats -->
@@ -23,7 +23,7 @@
       [attr.title]="getSeatTitle('right')">
 
       <img *ngIf="isOrganizer && getRightSeatPicture()" [src]="getRightSeatPicture()" alt="Profile"
-        (error)="handleImageError($event)" (click)="openProfile(rightSeat)">
+        (error)="handleImageError($event)" (click)="seatClicked(rightSeat)" [class.swap-selected-woman]="isSelectedForSwap(rightSeat!)">
     </div>
 
     <!-- Feedback dot only for profile-picture seats -->
