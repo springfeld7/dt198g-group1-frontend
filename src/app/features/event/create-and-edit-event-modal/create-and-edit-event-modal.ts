@@ -13,6 +13,12 @@ import { Event } from '../../../models/event';
   templateUrl: './create-and-edit-event-modal.html',
   styleUrl: './create-and-edit-event-modal.scss',
 })
+/**
+ * Shared event form modal used for both event creation and event editing.
+ *
+ * Create mode is active when no event id is provided.
+ * Edit mode loads the existing event and enables deletion.
+ */
 export class CreateAndEditEventModal {
   private backendService = inject(BackendService);
   private messageService = inject(MessageService);
@@ -31,10 +37,16 @@ export class CreateAndEditEventModal {
   previewImageUrl: string | null = null;
   selectedImageFile: File | null = null;
 
+  /**
+   * Determines which form state and actions should be shown.
+   */
   get isCreateMode(): boolean {
     return !this.eventId;
   }
 
+  /**
+   * Backing model for the event form inputs.
+   */
   formData = {
     title: '',
     location: '',
@@ -43,6 +55,10 @@ export class CreateAndEditEventModal {
     description: ''
   };
 
+  /**
+   * Loads the existing event when the component is opened in edit mode.
+   * Falls back to route params so the component can still be used directly by route.
+   */
   ngOnInit(): void {
     if (this.eventId) {
       this.loadEvent(this.eventId);
@@ -58,14 +74,23 @@ export class CreateAndEditEventModal {
     });
   }
 
+  /**
+   * Resolves the backend image url for the current event.
+   */
   get imageUrl(): string {
     return this.backendService.getEventPictureUrl(this.eventId);
   }
 
+  /**
+   * Replaces broken event images with the local placeholder asset.
+   */
   handleImageError(event: globalThis.Event): void {
     (event.target as HTMLImageElement).src = '/event-placeholder.svg';
   }
 
+  /**
+   * Stores the selected file and generates a local preview for create mode.
+   */
   onImageSelected(event: globalThis.Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
@@ -78,10 +103,16 @@ export class CreateAndEditEventModal {
     reader.readAsDataURL(file);
   }
 
+  /**
+   * Opens the hidden file input from the visible action button.
+   */
   triggerImageUpload(input: HTMLInputElement): void {
     input.click();
   }
 
+  /**
+   * Closes the modal and falls back to the events route when used outside a parent modal host.
+   */
   close(): void {
     this.closeModal.emit();
 
@@ -90,6 +121,9 @@ export class CreateAndEditEventModal {
     }
   }
 
+  /**
+   * Dispatches the form submission to the correct persistence flow.
+   */
   save(): void {
     if (this.isSaving) return;
     if (this.isCreateMode) {
@@ -99,6 +133,9 @@ export class CreateAndEditEventModal {
     }
   }
 
+  /**
+   * Creates a new event from the current form state.
+   */
   private createEvent(): void {
     this.isSaving = true;
     this.backendService.createEvent({
@@ -121,6 +158,9 @@ export class CreateAndEditEventModal {
       });
   }
 
+  /**
+   * Updates the currently selected event.
+   */
   private updateEvent(): void {
     this.isSaving = true;
     this.backendService.updateEvent(this.eventId, {
@@ -143,11 +183,17 @@ export class CreateAndEditEventModal {
       });
   }
 
+  /**
+   * Opens the delete confirmation modal for the current event.
+   */
   requestDeleteEvent(): void {
     if (!this.eventId || this.isDeleting) return;
     this.isConfirmModalOpen = true;
   }
 
+  /**
+   * Handles the confirmation modal result before performing deletion.
+   */
   handleDeleteModalResponse(confirmed: boolean): void {
     this.isConfirmModalOpen = false;
     if (!confirmed) return;
@@ -155,6 +201,9 @@ export class CreateAndEditEventModal {
     this.deleteEvent();
   }
 
+  /**
+   * Deletes the current event and notifies the parent list.
+   */
   private deleteEvent(): void {
     if (!this.eventId || this.isDeleting) return;
 
@@ -174,6 +223,9 @@ export class CreateAndEditEventModal {
       });
   }
 
+  /**
+   * Fetches an event and maps it into the modal form shape.
+   */
   private loadEvent(id: string): void {
     if (!id) return;
 
@@ -194,6 +246,9 @@ export class CreateAndEditEventModal {
       });
   }
 
+  /**
+   * Extracts the most useful message from backend and runtime errors.
+   */
   private getErrorMessage(err: any, fallback: string): string {
     if (typeof err?.error?.message === 'string' && err.error.message.trim()) {
       return err.error.message;
@@ -206,6 +261,9 @@ export class CreateAndEditEventModal {
     return fallback;
   }
 
+  /**
+   * Converts a Date into the yyyy-mm-dd format expected by date inputs.
+   */
   private toDateInputValue(date: Date): string {
     const d = new Date(date);
     const year = d.getFullYear();

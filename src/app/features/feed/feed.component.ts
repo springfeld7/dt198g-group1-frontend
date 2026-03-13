@@ -15,6 +15,9 @@ import { CreateAndEditEventModal } from "../event/create-and-edit-event-modal/cr
   templateUrl: './feed.component.html',
   styleUrl: './feed.component.scss'
 })
+/**
+ * Renders the event feed and coordinates admin actions such as create, edit, and delete.
+ */
 export class FeedComponent {
   private backendService = inject(BackendService);
   private authService = inject(AuthService);
@@ -138,10 +141,16 @@ export class FeedComponent {
     this.selectedEventFormId = event._id;
   }
 
+  /**
+   * Closes the shared create/edit modal.
+   */
   closeForm(): void {
     this.selectedEventFormId = null;
   }
 
+  /**
+   * Applies either a newly created event or an edited event to the local feed state.
+   */
   onEventSaved(savedEvent: Event): void {
     const existingIndex = this.eventList.findIndex(e => e._id === savedEvent._id);
     const now = new Date().getTime();
@@ -165,6 +174,9 @@ export class FeedComponent {
     this.futureEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }
 
+  /**
+   * Removes a deleted event from both the full list and the filtered future list.
+   */
   onEventDeleted(deletedEventId: string): void {
     this.eventList = this.eventList.filter(e => e._id !== deletedEventId);
     this.futureEvents = this.futureEvents.filter(e => e._id !== deletedEventId);
