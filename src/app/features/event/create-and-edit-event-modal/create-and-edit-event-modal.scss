@@ -1,0 +1,135 @@
+.modal-backdrop {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.35);
+	display: grid;
+	place-items: center;
+	z-index: 1000;
+    overflow-y: auto;
+
+	.modal-card {
+		position: relative;
+		width: min(600pt, 85vw);
+        height: fit-content;
+        margin-top: 1rem;
+		background: #ffffff;
+		border: 1pt solid #d7d7d7;
+		padding: 2.5rem 0.5rem;
+		box-shadow: 0 14pt 38pt rgba(0, 0, 0, 0.18);
+
+		.close-button {
+			position: absolute;
+			top: 0.75rem;
+			right: 1rem;
+			border: none;
+			background: transparent;
+			color: #222;
+			font-size: 2rem;
+			line-height: 1;
+			cursor: pointer;
+		}
+
+		.event-image {
+			display: block;
+			width: min(260pt, 35vw);
+			max-width: 100%;
+			height: auto;
+			margin: 0 auto 0.85rem;
+			object-fit: cover;
+		}
+
+		.hidden-file-input {
+			display: none;
+		}
+
+		.image-placeholder {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: min(260pt, 35vw);
+			max-width: 85%;
+			aspect-ratio: 4 / 3;
+			background: #e8e8e8;
+			margin: 0 auto 0.85rem;
+
+			img {
+				width: 40%;
+				opacity: 0.5;
+			}
+		}
+
+		.change-image {
+			display: block;
+			margin: 0 auto 1.2rem;
+			border: 1pt solid #4f83d8;
+			background: #6098ea;
+			color: #fff;
+			border-radius: 8pt;
+			padding: 0.45rem 1rem;
+			cursor: pointer;
+		}
+
+		.edit-form {
+			display: grid;
+			gap: 0.75rem;
+            justify-items: center;
+            height: fit-content;
+
+            input {
+                width: min(200pt, 60vw);
+                max-width: 70vw;
+                justify-self: center;
+                border: 1pt solid #ddd;
+            }
+
+            .max-spots {
+                input {
+                    width: min(100pt, 70vw);
+                }
+
+                label {
+                    color: #cc3b3b;
+                    font-weight: 600;
+                    font-size: 0.75rem;
+                }
+            }
+
+            .description {
+                width: min(500pt, 75vw);
+                border: 1pt solid #ddd;
+                border-radius: 10pt;
+                padding: 0.75rem;
+                font-size: 1rem;
+                resize: none;
+            }
+
+			.actions {
+				display: flex;
+				justify-content: center;
+				gap: 1.2rem;
+
+				button {
+					border: none;
+					color: #fff;
+					padding: 0.5rem;
+					border-radius: 8pt;
+					cursor: pointer;
+					width: min(120pt, 35vw);
+
+					&:disabled {
+						opacity: 0.7;
+						cursor: default;
+					}
+				}
+
+				.save {
+					background: #2abf61;
+				}
+
+				.delete {
+					background: #ef5151;
+				}
+			}
+		}
+	}
+}

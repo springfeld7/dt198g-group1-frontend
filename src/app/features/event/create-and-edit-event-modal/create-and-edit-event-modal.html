@@ -1,0 +1,90 @@
+<div class="modal-backdrop" (click)="close()">
+	<section class="modal-card" (click)="$event.stopPropagation()">
+		<button class="close-button" type="button" (click)="close()" aria-label="Close">
+			X
+		</button>
+
+		<!-- Edit mode: image from backend -->
+		<img *ngIf="!isCreateMode" [src]="imageUrl" alt="Event image" class="event-image" (error)="handleImageError($event)" />
+
+		<!-- Create mode: preview or placeholder -->
+		<img *ngIf="isCreateMode && previewImageUrl" [src]="previewImageUrl" alt="Event image preview" class="event-image" />
+		<div *ngIf="isCreateMode && !previewImageUrl" class="image-placeholder">
+			<img src="/image.svg" alt="Image placeholder" />
+		</div>
+
+		<input #imageInput type="file" accept="image/*" class="hidden-file-input" (change)="onImageSelected($event)" />
+		<button type="button" class="change-image" (click)="triggerImageUpload(imageInput)">
+			{{ isCreateMode ? 'Upload image' : 'Change image' }}
+		</button>
+
+		<form class="edit-form" (ngSubmit)="save()">
+			<input
+				type="text"
+				name="title"
+				placeholder="Event title"
+				[(ngModel)]="formData.title"
+				required
+			/>
+
+			<input
+				type="text"
+				name="location"
+				placeholder="Location"
+				[(ngModel)]="formData.location"
+				required
+			/>
+
+			<input
+				type="date"
+				name="date"
+				[(ngModel)]="formData.date"
+				required
+			/>
+
+			<div class="max-spots">
+				<label for="maxSpots">Max spots</label>
+				<input
+					id="maxSpots"
+					name="maxSpots"
+					type="number"
+					min="2"
+					step="2"
+					[(ngModel)]="formData.maxSpots"
+					required
+				/>
+			</div>
+
+			<textarea
+				class="description"
+				name="description"
+				placeholder="Description"
+				rows="5"
+				[(ngModel)]="formData.description"
+				required
+			></textarea>
+
+			<div class="actions">
+				<button *ngIf="isCreateMode" type="submit" class="save" [disabled]="isSaving">
+					{{ isSaving ? 'Creating...' : 'Create' }}
+				</button>
+				<ng-container *ngIf="!isCreateMode">
+					<button type="submit" class="save" [disabled]="isSaving || isDeleting">
+						{{ isSaving ? 'Saving...' : 'Save event' }}
+					</button>
+					<button type="button" class="delete" (click)="requestDeleteEvent()" [disabled]="isSaving || isDeleting">
+						{{ isDeleting ? 'Deleting...' : 'Delete event' }}
+					</button>
+				</ng-container>
+			</div>
+		</form>
+	</section>
+
+	<app-confirm-modal
+		[isOpen]="isConfirmModalOpen"
+		title="Delete Event"
+		message="Are you sure you want to delete this event?"
+		confirmText="Delete"
+		(confirmed)="handleDeleteModalResponse($event)">
+	</app-confirm-modal>
+</div>
