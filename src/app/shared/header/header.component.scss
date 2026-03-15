@@ -53,3 +53,13 @@ a {
     transform: scale(1);
   }
 }
+
+
+
+@media screen and (max-width: 500px) {
+  .icon {
+    margin-bottom: -10px;
+    margin-top: -5px;
+    transform: scale(75%);
+  }
+}
