@@ -1,11 +1,12 @@
 <div class="table-container">
   <!-- LEFT SEAT WRAPPER -->
-  <div class="seat-wrapper left">
+  <div class="seat-wrapper left" (mouseenter)="hoveredSeat = leftSeat" (mouseleave)="hoveredSeat = undefined">
     <div class="seat" [class.seat-picture]="isOrganizer" [class.your-seat]="isCurrentUserSeat('left')"
       [attr.title]="getSeatTitle('left')">
 
       <img *ngIf="isOrganizer && getLeftSeatPicture()" [src]="getLeftSeatPicture()" alt="Profile"
-        (error)="handleImageError($event)" (click)="seatClicked(leftSeat)" [class.swap-selected-man]="isSelectedForSwap(leftSeat!)">
+        (error)="handleImageError($event)" (click)="seatClicked(leftSeat)"
+        [class.swap-selected-man]="isSelectedForSwap(leftSeat!)">
     </div>
 
     <!-- Feedback dot only for profile-picture seats -->
@@ -18,16 +19,21 @@
   </div>
 
   <!-- RIGHT SEAT WRAPPER -->
-  <div class="seat-wrapper right">
+  <div class="seat-wrapper right" (mouseenter)="hoveredSeat = rightSeat" (mouseleave)="hoveredSeat = undefined">
     <div class="seat" [class.seat-picture]="isOrganizer" [class.your-seat]="isCurrentUserSeat('right')"
       [attr.title]="getSeatTitle('right')">
 
       <img *ngIf="isOrganizer && getRightSeatPicture()" [src]="getRightSeatPicture()" alt="Profile"
-        (error)="handleImageError($event)" (click)="seatClicked(rightSeat)" [class.swap-selected-woman]="isSelectedForSwap(rightSeat!)">
+        (error)="handleImageError($event)" (click)="seatClicked(rightSeat)"
+        [class.swap-selected-woman]="isSelectedForSwap(rightSeat!)">
     </div>
 
     <!-- Feedback dot only for profile-picture seats -->
     <div *ngIf="isOrganizer && rightSeat?.hasFeedback" class="feedback-dot"></div>
+  </div>
+  <!-- Hover box -->
+  <div *ngIf="isOrganizer && hoveredSeat?.feedback" class="feedback-box">
+    {{ hoveredSeat?.feedback }}
   </div>
 </div>
 <app-organizer-event-profile #profileModal></app-organizer-event-profile>

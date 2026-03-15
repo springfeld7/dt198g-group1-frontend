@@ -2,7 +2,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: clamp(6px, 1.2vw, 12px);
   padding: clamp(6px, 1.2vw, 10px);
 
@@ -12,31 +11,17 @@
 
   width: clamp(110px, 20vw, 180px);
   height: clamp(40px, 7vw, 70px);
+
   box-sizing: border-box;
+  position: relative; // needed for tooltip positioning
 }
 
-/* Wrapper around seat for dot positioning */
+/* Wrapper around seat for dot and tooltip positioning */
 .seat-wrapper {
-  position: relative; // reference for feedback dot
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.seat {
-  width: clamp(16px, 3.5vw, 36px);
-  height: clamp(16px, 3.5vw, 36px);
-
-  border-radius: 50%;
-  background-color: #5dc3f0;
-  border: clamp(2px, 0.25vw, 3px) solid #2196F3;
-
-  flex-shrink: 0;
-
-  &.your-seat {
-    background-color: #7ed321;
-    border-color: #5fa318;
-  }
 
   &.left {
     order: 1;
@@ -44,6 +29,21 @@
 
   &.right {
     order: 3;
+  }
+}
+
+/* Seat circle / profile picture */
+.seat {
+  width: clamp(16px, 3.5vw, 36px);
+  height: clamp(16px, 3.5vw, 36px);
+  border-radius: 50%;
+  background-color: #5dc3f0;
+  border: clamp(2px, 0.25vw, 3px) solid #2196F3;
+  flex-shrink: 0;
+
+  &.your-seat {
+    background-color: #7ed321;
+    border-color: #5fa318;
   }
 
   &.seat-picture {
@@ -61,32 +61,23 @@
   }
 }
 
-/* Feedback dot moved outside the seat */
+/* Feedback indicator dot */
 .seat-wrapper .feedback-dot {
   width: 10px;
   height: 10px;
   background-color: red;
   border-radius: 50%;
+
   position: absolute;
-  bottom: -3px; /* slightly outside the seat */
-  right: -3px;  /* bottom-right corner */
+  bottom: -3px;
+  right: -3px;
+
+  z-index: 10;
 }
 
-.seat-wrapper.left {
-  order: 1;
-}
-
-.table-box {
-  order: 2; // already exists
-}
-
-.seat-wrapper.right {
-  order: 3;
-}
-
+/* Table center box */
 .table-box {
   background-color: #222;
-
   width: clamp(28px, 6vw, 60px);
   height: clamp(22px, 5vw, 45px);
 
@@ -95,7 +86,6 @@
   justify-content: center;
 
   border-radius: 2px;
-
   order: 2;
   flex-shrink: 0;
 }
@@ -108,6 +98,7 @@
   text-align: center;
 }
 
+/* Swap highlighting */
 .swap-selected-man {
   border-radius: 50%;
   border: 8px solid rgb(42, 42, 236);
@@ -115,5 +106,33 @@
 
 .swap-selected-woman {
   border-radius: 50%;
-  border: 8px solid rgb(236, 42, 140); // bright pink for women
+  border: 8px solid rgb(236, 42, 140);
+}
+
+/* ========================= */
+/* Feedback tooltip styling */
+/* ========================= */
+.feedback-box {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+
+  background-color: #333;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 24px;
+  z-index: 10000;
+  pointer-events: none;
+
+  display: inline-block; // important for width/max-width
+  max-width: 220px; // cap width
+  width: max-content; // let it expand naturally
+  min-width: 50px; // optional: prevent too narrow
+  white-space: normal; // allow wrapping
+  overflow-wrap: break-word; // break long words
+  text-align: center;
+
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
 }

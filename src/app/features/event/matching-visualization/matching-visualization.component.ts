@@ -27,7 +27,7 @@ export class MatchingVisualizationComponent implements OnInit, OnDestroy {
   hoveredWoman?: User;
 
   private intervalId: any = null;
-  snapshotsPerSecond = 5;
+  snapshotsPerSecond = 8;
 
   /**
    * Initialize component.

@@ -21,6 +21,7 @@ export class SeatPairComponent {
   @Input() selectedMen: Seat[] = [];
   @Input() selectedWomen: Seat[] = [];
   @Output() seatSelectedForSwap = new EventEmitter<Seat>();
+  hoveredSeat?: Seat;
 
   @ViewChild(OrganizerEventProfileComponent) profileModal!: OrganizerEventProfileComponent;
 

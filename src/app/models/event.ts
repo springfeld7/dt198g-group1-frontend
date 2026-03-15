@@ -8,7 +8,7 @@ export interface Event {
   date: Date;
   location: string;
   maxSpots: number;
-
+  currentRound?: number;
   registeredMen: (string | User)[];
   registeredWomen: (string | User)[];
 

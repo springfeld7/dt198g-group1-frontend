@@ -8,4 +8,5 @@ export interface Seat {
   user?: User;
   profilePicture?: string;   // Optional: URL for participant image
   hasFeedback?: boolean;
+  feedback?: string;
 }

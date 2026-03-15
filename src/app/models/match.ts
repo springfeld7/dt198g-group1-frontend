@@ -6,6 +6,7 @@ export interface Match {
   man: string | User;
   woman: string | User;
   tableNumber: number;
+  startTime?: Date;
   manSeat: 'left' | 'right';
   womanSeat: 'left' | 'right';
   reviews?: (string | Review)[];
