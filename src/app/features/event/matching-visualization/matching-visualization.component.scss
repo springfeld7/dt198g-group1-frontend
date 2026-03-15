@@ -60,6 +60,11 @@
   font-weight: 600;
 }
 
+/* Column labels (women) */
+.heatmap thead th:not(:first-child) {
+  font-weight: 600;
+}
+
 .heat-cell {
   width: 60px;
   height: 60px;

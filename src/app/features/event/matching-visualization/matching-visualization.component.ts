@@ -153,23 +153,23 @@ export class MatchingVisualizationComponent implements OnInit, OnDestroy {
       // Base step: 0 → 1 mapping to icy blue → indigo
       const normalized = Math.max(0, Math.min(1, score));
 
-      // Icy Blue → Deep Indigo
       const r = Math.round(174 * (1 - normalized) + 75 * normalized);  // 174 → 75
       const g = Math.round(239 * (1 - normalized) + 0 * normalized);   // 239 → 0
       const b = Math.round(255 * (1 - normalized) + 130 * normalized); // 255 → 130
 
       return `rgb(${r},${g},${b})`;
     } else {
-      // Updates (later steps)
-      const min = 0.5;
-      const max = 1.5;
+      // Compute min/max dynamically from the currently displayed matrix
+      const matrix = this.currentMatrix;
+      const values = matrix.flat().filter(v => v > -1000); // ignore forbidden
+      const min = Math.min(...values, 0); // fallback to 0
+      const max = Math.max(...values, 1); // fallback to 1 to avoid division by zero
 
       if (score <= min) return 'rgb(174,239,255)'; // icy blue
       if (score >= max) return 'rgb(75,0,130)';    // deep indigo
 
-      const t = (score - min) / (max - min); // 0..1
+      const t = (score - min) / (max - min); // 0..1 interpolation
 
-      // Interpolate between icy blue → indigo
       const r = Math.round(174 * (1 - t) + 75 * t);
       const g = Math.round(239 * (1 - t) + 0 * t);
       const b = Math.round(255 * (1 - t) + 130 * t);
