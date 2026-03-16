@@ -1,5 +1,8 @@
 <div *ngIf="!isFinished">
-
+  <div class="textinfo">
+    <p>Please choose to share your contact</p>
+    <p>with the matches you liked:</p>
+  </div>
   <div class="match-list" *ngIf="previousDates.length; else noMatches">
     <div *ngFor="let match of previousDates" class="match-item" [class.pending]="!match.likedBy?.[userId]">
 

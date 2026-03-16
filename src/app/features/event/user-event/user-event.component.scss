@@ -112,14 +112,14 @@
             .table-number {
                 font-size: clamp(1rem, 3.5vw, 1rem);
                 font-weight: 700;
-                color: #d64aae;
+                color: #bc118c;
                 word-break: break-word;
             }
 
             .countdown {
                 font-size: clamp(0.9rem, 3.5vw, 1rem);
                 font-weight: 600;
-                color: #db22cf;
+                color: #dc43d2;
             }
         }
     }
@@ -128,6 +128,7 @@
 /* ---------- END OF EVENT ---------- */
 .end-event-container {
     text-align: center;
+    margin-bottom: 200px;
     padding: clamp(20px, 5vw, 30px);
     font-size: clamp(1rem, 4vw, 1.3rem);
     font-weight: 500;
