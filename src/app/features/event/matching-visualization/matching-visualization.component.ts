@@ -27,7 +27,7 @@ export class MatchingVisualizationComponent implements OnInit, OnDestroy {
   hoveredWoman?: User;
 
   private intervalId: any = null;
-  snapshotsPerSecond = 5;
+  snapshotsPerSecond = 8;
 
   /**
    * Initialize component.
@@ -150,26 +150,28 @@ export class MatchingVisualizationComponent implements OnInit, OnDestroy {
     if (score <= -1000) return '#000000';
 
     if (this.currentStep === 0) {
-      // Base step: 0 → 1 mapping to icy blue → indigo
       const normalized = Math.max(0, Math.min(1, score));
-
-      // Icy Blue → Deep Indigo
-      const r = Math.round(174 * (1 - normalized) + 75 * normalized);  // 174 → 75
-      const g = Math.round(239 * (1 - normalized) + 0 * normalized);   // 239 → 0
-      const b = Math.round(255 * (1 - normalized) + 130 * normalized); // 255 → 130
-
+      const r = Math.round(174 * (1 - normalized) + 75 * normalized);
+      const g = Math.round(239 * (1 - normalized) + 0 * normalized);
+      const b = Math.round(255 * (1 - normalized) + 130 * normalized);
       return `rgb(${r},${g},${b})`;
     } else {
-      // Updates (later steps)
-      const min = 0.5;
-      const max = 1.5;
+      const matrix = this.currentMatrix;
+      const values = matrix.flat().filter(v => v > -1000);
 
-      if (score <= min) return 'rgb(174,239,255)'; // icy blue
-      if (score >= max) return 'rgb(75,0,130)';    // deep indigo
+      // Dynamic minimum based on current data
+      const min = values.length > 0 ? Math.min(...values) : 0;
 
-      const t = (score - min) / (max - min); // 0..1
+      // Dynamic maximum capped at 1.4
+      const observedMax = values.length > 0 ? Math.max(...values) : 1;
+      const max = Math.min(observedMax, 1.4);
 
-      // Interpolate between icy blue → indigo
+      // Handle range to avoid division by zero
+      const range = (max - min) === 0 ? 1 : (max - min);
+
+      // Clamp the score within the calculated range (min to max)
+      const t = Math.max(0, Math.min(1, (score - min) / range));
+
       const r = Math.round(174 * (1 - t) + 75 * t);
       const g = Math.round(239 * (1 - t) + 0 * t);
       const b = Math.round(255 * (1 - t) + 130 * t);

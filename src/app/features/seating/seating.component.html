@@ -3,7 +3,9 @@
   <div class="tables-grid">
     <div class="row" *ngFor="let row of tables | slice:0:tables.length; let rowIndex = index">
       <app-seat-pair *ngFor="let table of tables.slice(rowIndex * 2, rowIndex * 2 + 2)" [table]="table"
-        [isOrganizer]="isAdmin" [currentUserId]="currentUserId">
+        [isOrganizer]="isAdmin" [currentUserId]="currentUserId" [event]="event" [swapMode]="swapMode"
+        [selectedMen]="selectedMen" [selectedWomen]="selectedWomen"
+        (seatSelectedForSwap)="seatSelectedForSwap.emit($event)">
       </app-seat-pair>
     </div>
   </div>

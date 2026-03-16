@@ -1,9 +1,10 @@
-import { Component, OnInit, inject, Input } from '@angular/core';
+import { Component, OnInit, inject, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SeatPairComponent } from './seat-pair/seat-pair.component';
 import { AuthService } from '../../services/auth.service';
 import { Table } from '../../models/table';
 import { Seat } from '../../models/seat';
+import { Event as EventModel } from '../../models/event';
 
 @Component({
   selector: 'app-seating',
@@ -12,8 +13,14 @@ import { Seat } from '../../models/seat';
   styleUrls: ['./seating.component.scss']
 })
 export class SeatingComponent implements OnInit {
+  @Input() event!: EventModel;
   @Input() maxSpots!: number;
   @Input() tables: Table[] = [];
+  @Input() swapMode = false;
+  @Input() selectedMen: Seat[] = [];
+  @Input() selectedWomen: Seat[] = [];
+  @Output() seatSelectedForSwap = new EventEmitter<Seat>();
+
   isAdmin = false;
   currentUserId = '';
 
@@ -39,6 +46,18 @@ export class SeatingComponent implements OnInit {
           { position: 'right', tableNumber: i + 1 }
         ]
       }));
+    }
+  }
+
+  /**
+   * Emits the selected seat for swapping when a seat is clicked in swap mode.
+   * @param seat The clicked seat.
+   */
+  seatClicked(seat: Seat) {
+    if (this.swapMode) {
+      this.seatSelectedForSwap.emit(seat); // bubble to OrganizerEventComponent
+    } else {
+      // optionally do nothing, or handle other clicks
     }
   }
 }

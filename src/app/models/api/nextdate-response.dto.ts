@@ -21,4 +21,5 @@ export interface NextDateResponseDto {
   user: NextDateUserDto;
   tableNumber: number;
   seat: SeatType;
+  startTime: Date;
 }

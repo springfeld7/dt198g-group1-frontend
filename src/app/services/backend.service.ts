@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
 import { Event } from '../models/event';
@@ -15,6 +15,7 @@ import { UserUpdateData } from '../models/api/user-update.dto';
 import { MatchingResponseDto } from '../models/api/matching-response.dto';
 import { Match } from '../models/match';
 import { NextDateResponseDto } from '../models/api/nextdate-response.dto';
+import { EventReviewsResponse } from '../models/api/getreview-response.dto';
 
 
 @Injectable({
@@ -265,32 +266,32 @@ export class BackendService {
 		return firstValueFrom(this.http.delete<DeleteEventResponse>(endpoint, this.httpOptions));
 	}
 
-  /**
-   * Fetches all matches for a user at the end of an event.
-   * @param {string} eventId - The ID of the event.
-   * @returns {Promise<any>} A promise that resolves to the match data for the event.
-   */
-  getMatchesAtEnd(eventId: string): Promise<any[]> {
-    const endpoint = `${this.URL}/events/${eventId}/end/matches`;
-    return firstValueFrom(this.http.get<any[]>(endpoint, this.httpOptions));
-  }
+	/**
+	 * Fetches all matches for a user at the end of an event.
+	 * @param {string} eventId - The ID of the event.
+	 * @returns {Promise<any>} A promise that resolves to the match data for the event.
+	 */
+	getMatchesAtEnd(eventId: string): Promise<any[]> {
+		const endpoint = `${this.URL}/events/${eventId}/end/matches`;
+		return firstValueFrom(this.http.get<any[]>(endpoint, this.httpOptions));
+	}
 
 
-  /**
-   * Updates the like status of a match for a specific user.
-   * @param {string} userId - The unique ID of the user.
-   * @param {string} matchId - The ID of the match to update.
-   * @param {boolean} like - Whether the user likes the match (true) or not (false).
-   * @returns {Promise<Match>} A promise that resolves to the updated match data.
-   */
-  toggleLike(userId: string,matchId : string,like: boolean): Promise<Match> {
-    const endpoint = `${this.URL}/users/${userId}/matches`;
-    const body = {
-      matchId: matchId,
-      liked: like
-    };
-    return firstValueFrom(this.http.put<Match>(endpoint, body,this.httpOptions))
-  }
+	/**
+	 * Updates the like status of a match for a specific user.
+	 * @param {string} userId - The unique ID of the user.
+	 * @param {string} matchId - The ID of the match to update.
+	 * @param {boolean} like - Whether the user likes the match (true) or not (false).
+	 * @returns {Promise<Match>} A promise that resolves to the updated match data.
+	 */
+	toggleLike(userId: string, matchId: string, like: boolean): Promise<Match> {
+		const endpoint = `${this.URL}/users/${userId}/matches`;
+		const body = {
+			matchId: matchId,
+			liked: like
+		};
+		return firstValueFrom(this.http.put<Match>(endpoint, body, this.httpOptions))
+	}
 
 	/**
 	 * Generates matches for a specific round of an event along with snapshots for visualization.
@@ -322,7 +323,13 @@ export class BackendService {
 
 		return firstValueFrom(
 			this.http.get<NextDateResponseDto>(endpoint, this.httpOptions)
-		);
+		).then(next => {
+			// Only convert if we actually got a next date
+			if (next && next.startTime) {
+				return { ...next, startTime: new Date(next.startTime) };
+			}
+			return next;
+		});
 	}
 
 	/**
@@ -356,11 +363,33 @@ export class BackendService {
 	 * @returns A Promise resolving to the server response message.
 	 */
 	createReview(eventId: string, round: number, dateId: string, answers: Record<string, any>): Promise<{ message: string }> {
-		const endpoint = `${this.URL}/reviews`;
+		const endpoint = `${this.URL}/review`;
 		const body = { eventId, round, dateId, answers };
 
 		return firstValueFrom(
-			this.http.post<{ message: string }>(endpoint, body, this.httpOptions)
+			this.http.post<{ message: string; reviewId: string }>(endpoint, body, this.httpOptions)
+		);
+	}
+
+	/**
+	 * Retrieve all reviews for the current user within a specific event.
+	 *
+	 * This method calls the backend endpoint that returns the reviews associated
+	 * with the authenticated user for each round of the given event.
+	 * The response groups reviews by round (`firstRound`, `secondRound`, `thirdRound`).
+	 *
+	 * @param eventId - The unique identifier of the event whose reviews should be fetched.
+	 * @param userId - The unique identifier of the user.
+	 *
+	 * @returns A promise resolving to an {@link EventReviewsResponse} object containing
+	 * the reviews for each round of the event. Each round may contain an array of reviews
+	 * or `null` if no reviews exist for that round.
+	 */
+	getEventReviews(eventId: string, userId: string): Promise<EventReviewsResponse> {
+		const endpoint = `${this.URL}/events/${eventId}/reviews/${userId}`;
+
+		return firstValueFrom(
+			this.http.get<EventReviewsResponse>(endpoint, this.httpOptions)
 		);
 	}
 

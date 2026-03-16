@@ -1,45 +1,45 @@
-<div class="match-list" *ngIf="previousDates.length; else noMatches">
-  <div *ngFor="let match of previousDates"
-       class="match-item"
-       [class.pending]="!match.likedBy?.[userId]">
+<div *ngIf="!isFinished">
+  <div class="textinfo">
+    <p>Please choose to share your contact</p>
+    <p>with the matches you liked:</p>
+  </div>
+  <div class="match-list" *ngIf="previousDates.length; else noMatches">
+    <div *ngFor="let match of previousDates" class="match-item" [class.pending]="!match.likedBy?.[userId]">
 
-    <div class="image-container">
-      <img [src]="getProfilePicUrl(match.otherUser._id)" alt="Profile">
+      <div class="image-container">
+        <img [src]="getProfilePicUrl(match.otherUser._id)" alt="Profile">
+      </div>
+
+      <span class="match-name">
+        {{ match.otherUser.firstName }} {{ match.otherUser.surname }}
+      </span>
+
+      <span class="match-actions">
+        <label>
+          <input type="checkbox" [(ngModel)]="match.selected" name="match-{{match.matchId}}">
+          Like
+        </label>
+      </span>
+
     </div>
 
-    <span class="match-name">
-      {{ match.otherUser.firstName }} {{ match.otherUser.surname }}
-    </span>
-
-    <span class="match-actions">
-   <label>
-<input type="checkbox"
-       [(ngModel)]="match.selected"
-       name="match-{{match.matchId}}">
-    Like
-  </label>
-    </span>
-
+    <div class="confirm-actions">
+      <button class="confirm-btn" (click)="onConfirmSelectedMatches()">
+        Confirm Selected Matches
+      </button>
+    </div>
   </div>
 
-  <div class="confirm-actions">
-    <button class="confirm-btn" (click)="onConfirmSelectedMatches()">
-      Confirm Selected Matches
-    </button>
+  <ng-template #noMatches>
+    <p>No matches found for this event.</p>
+  </ng-template>
+
+  <div class="end-of-date-modal-wrapper">
+    <app-confirm-modal [isOpen]="isModalOpen" [modalClass]="'end-of-date-modal'"
+      title="Share information with these matches"
+      [message]="'Are you sure you want to share information with these matches?'" confirmText="OK"
+      (confirmed)="handleModalResponse($event)">
+    </app-confirm-modal>
   </div>
-</div>
 
-<ng-template #noMatches>
-  <p>No matches found for this event.</p>
-</ng-template>
-
-<div class="end-of-date-modal-wrapper">
-<app-confirm-modal
-  [isOpen]="isModalOpen"
-  [modalClass]="'end-of-date-modal'"
-  title="Share information with these matches"
-  [message]="'Are you sure you want to share information with these matches?'"
-  confirmText="OK"
-  (confirmed)="handleModalResponse($event)">
-</app-confirm-modal>
 </div>
