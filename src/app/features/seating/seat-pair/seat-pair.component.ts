@@ -103,11 +103,13 @@ export class SeatPairComponent {
    */
   seatClicked(seat: Seat | undefined): void {
     if (this.swapMode) {
-      // In swap mode, select the seat instead of opening modal
       this.seatSelectedForSwap.emit(seat);
-    } else {
-      // normal mode: open profile modal
+      return;
+    }
+
+    if (this.isOrganizer) {
       this.openProfile(seat);
     }
   }
 }
+

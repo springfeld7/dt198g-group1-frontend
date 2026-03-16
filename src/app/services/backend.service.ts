@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
 import { Event } from '../models/event';
@@ -266,32 +266,32 @@ export class BackendService {
 		return firstValueFrom(this.http.delete<DeleteEventResponse>(endpoint, this.httpOptions));
 	}
 
-  /**
-   * Fetches all matches for a user at the end of an event.
-   * @param {string} eventId - The ID of the event.
-   * @returns {Promise<any>} A promise that resolves to the match data for the event.
-   */
-  getMatchesAtEnd(eventId: string): Promise<any[]> {
-    const endpoint = `${this.URL}/events/${eventId}/end/matches`;
-    return firstValueFrom(this.http.get<any[]>(endpoint, this.httpOptions));
-  }
+	/**
+	 * Fetches all matches for a user at the end of an event.
+	 * @param {string} eventId - The ID of the event.
+	 * @returns {Promise<any>} A promise that resolves to the match data for the event.
+	 */
+	getMatchesAtEnd(eventId: string): Promise<any[]> {
+		const endpoint = `${this.URL}/events/${eventId}/end/matches`;
+		return firstValueFrom(this.http.get<any[]>(endpoint, this.httpOptions));
+	}
 
 
-  /**
-   * Updates the like status of a match for a specific user.
-   * @param {string} userId - The unique ID of the user.
-   * @param {string} matchId - The ID of the match to update.
-   * @param {boolean} like - Whether the user likes the match (true) or not (false).
-   * @returns {Promise<Match>} A promise that resolves to the updated match data.
-   */
-  toggleLike(userId: string,matchId : string,like: boolean): Promise<Match> {
-    const endpoint = `${this.URL}/users/${userId}/matches`;
-    const body = {
-      matchId: matchId,
-      liked: like
-    };
-    return firstValueFrom(this.http.put<Match>(endpoint, body,this.httpOptions))
-  }
+	/**
+	 * Updates the like status of a match for a specific user.
+	 * @param {string} userId - The unique ID of the user.
+	 * @param {string} matchId - The ID of the match to update.
+	 * @param {boolean} like - Whether the user likes the match (true) or not (false).
+	 * @returns {Promise<Match>} A promise that resolves to the updated match data.
+	 */
+	toggleLike(userId: string, matchId: string, like: boolean): Promise<Match> {
+		const endpoint = `${this.URL}/users/${userId}/matches`;
+		const body = {
+			matchId: matchId,
+			liked: like
+		};
+		return firstValueFrom(this.http.put<Match>(endpoint, body, this.httpOptions))
+	}
 
 	/**
 	 * Generates matches for a specific round of an event along with snapshots for visualization.
@@ -323,7 +323,13 @@ export class BackendService {
 
 		return firstValueFrom(
 			this.http.get<NextDateResponseDto>(endpoint, this.httpOptions)
-		);
+		).then(next => {
+			// Only convert if we actually got a next date
+			if (next && next.startTime) {
+				return { ...next, startTime: new Date(next.startTime) };
+			}
+			return next;
+		});
 	}
 
 	/**

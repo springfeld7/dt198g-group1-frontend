@@ -141,11 +141,14 @@ export class EventComponent {
     this.editClicked.emit();
   }
 
-
   /** Handler for the Check in button */
   onCheckIn(): void {
     console.log('Check in clicked for', this.event.title);
-    // implement check-in logic here
+
+    if (!this.event?._id) return;
+
+    // Navigate to /events/:eventId
+    this.router.navigate(['/events', this.event._id]);
   }
 
   /** Navigates to manage event page */

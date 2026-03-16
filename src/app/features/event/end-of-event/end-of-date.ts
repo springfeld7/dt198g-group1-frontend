@@ -1,10 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {ConfirmModalComponent} from '../../shared/confirm-modal/confirm-modal.component';
-import {BackendService} from '../../../services/backend.service';
-import {AuthService} from '../../../services/auth.service';
-import {MessageService} from '../../../services/message.service';
-import {FormsModule} from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ConfirmModalComponent } from '../../shared/confirm-modal/confirm-modal.component';
+import { BackendService } from '../../../services/backend.service';
+import { AuthService } from '../../../services/auth.service';
+import { MessageService } from '../../../services/message.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-end-of-event',
@@ -12,19 +12,20 @@ import {FormsModule} from '@angular/forms';
   templateUrl: './end-of-date.html',
   styleUrl: './end-of-date.scss',
 })
-export class EndOfDate implements OnInit{
+export class EndOfDate implements OnInit {
 
   userId: string = '';
   @Input() eventId: string = '';
-  previousDates :any = [];
+  previousDates: any = [];
   isModalOpen = false;
   selectedMatchId: string | null = null;
+  isFinished = false;
 
   constructor(
     private backend: BackendService,
     private auth: AuthService,
-    private messageService : MessageService,
-  ) {}
+    private messageService: MessageService,
+  ) { }
 
   /**
    * Initializes the component by fetching the current previous dates
@@ -72,7 +73,8 @@ export class EndOfDate implements OnInit{
       this.toggleLikes(match.matchId);
       match.selected = false;
     });
-    this.isModalOpen = true;
+
+    this.isFinished = true;
   }
 
   /**

@@ -35,7 +35,7 @@
   background-color: #e75daa;
 
   margin: clamp(12px, 3vw, 20px) 0;
-
+  margin-top: -2em;
   border-radius: 2px;
 }
 
@@ -56,7 +56,7 @@
 .info-item {
   display: flex;
   align-items: center;
-
+  font-size: 4vw;
   gap: clamp(6px, 1.5vw, 8px);
 }
 

@@ -1,0 +1,94 @@
+<div class="event-wrapper">
+
+    <!-- WAITING FOR NEXT DATE -->
+    <div *ngIf="isWaiting" class="waiting-container">
+        <p class="loading-text">Please wait while your next date is getting ready...</p>
+    </div>
+
+    <!-- NEXT DATE DISPLAY -->
+    <div *ngIf="!isWaiting && nextDate && !isFormOpen" class="next-date-container">
+        <p class="section-title">Your next date:</p>
+
+        <div class="profile-info">
+            <!-- Profile picture -->
+            <div class="image-container">
+                <img [src]="getProfilePicUrl(nextDate.user._id)" alt="Profile" (error)="handleImageError($event)">
+            </div>
+
+            <!-- Participant details -->
+            <!-- Participant details -->
+            <div class="details">
+                <p class="name">{{ nextDate.user.firstName }} {{ nextDate.user.surname }}</p>
+
+                <!-- Interests as a list -->
+                <div class="interests" *ngIf="nextDate.user.interests?.length">
+                    <p class="label">Interests:</p>
+                    <ul>
+                        <li *ngFor="let interest of nextDate.user.interests" class="interest-tag">
+                            {{ interest.name }}
+                        </li>
+                    </ul>
+                </div>
+
+                <p class="table-number">Table {{ nextDate.tableNumber }}</p>
+
+                <!-- Countdown -->
+                <p class="countdown" *ngIf="dateCountdown > 0">
+                    Starting soon {{ getFormattedCountdown(dateCountdown) }}
+                </p>
+
+                <p class="countdown" *ngIf="dateCountdown === 0 && dateEndCountdown > 0">
+                    Date ends in: {{ getFormattedCountdown(dateEndCountdown) }}
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="seating-wrapper">
+        <!-- SEATING COMPONENT -->
+        <app-seating *ngIf="currentRound <= 3 && event && !isFormOpen" [event]="event" [tables]="tables"
+            [maxSpots]="event.maxSpots || 0">
+        </app-seating>
+    </div>
+</div>
+
+<div *ngIf="isFormOpen" class="review-form-container">
+    <form (ngSubmit)="submitReview()" #reviewForm="ngForm">
+        <div *ngFor="let q of questions" class="question-item">
+
+            <!-- Text question -->
+            <div *ngIf="q.type === 'text'">
+                <label>{{ q.text }}</label>
+                <textarea [(ngModel)]="answers[q._id]" name="{{q._id}}" rows="3"></textarea>
+            </div>
+
+            <!-- Boolean question -->
+            <div *ngIf="q.type === 'boolean'">
+                <label>{{ q.text }}</label>
+                <label><input type="radio" [(ngModel)]="answers[q._id]" name="{{q._id}}" [value]="true"> Yes</label>
+                <label><input type="radio" [(ngModel)]="answers[q._id]" name="{{q._id}}" [value]="false"> No</label>
+            </div>
+
+            <!-- Multiple choice -->
+            <div *ngIf="q.type === 'multipleChoice'">
+                <label>{{ q.text }}</label>
+                <select [(ngModel)]="answers[q._id]" name="{{q._id}}">
+                    <option *ngFor="let opt of q.options" [value]="opt">{{ opt }}</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="form-footer">
+            <span class="autosubmit-countdown">
+                Autosubmit in {{ reviewCountdownDisplay }}
+            </span>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+<!-- END OF EVENT MESSAGE -->
+<div *ngIf="currentRound > 3" class="end-event-container">
+    <p>Thank you for participating!</p>
+    <p>Welcome back for the next event!</p>
+    <app-end-of-event [eventId]="eventId"></app-end-of-event>
+</div>
