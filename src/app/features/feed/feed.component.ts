@@ -6,13 +6,18 @@ import { AuthService } from '../../services/auth.service';
 import { MessageService } from '../../services/message.service';
 import type { Event } from '../../models/event';
 import { User } from '../../models/user';
+import { CreateAndEditEventModal } from "../event/create-and-edit-event-modal/create-and-edit-event-modal";
 
 @Component({
   selector: 'app-feed',
-  imports: [EventComponent, CommonModule],
+  standalone: true,
+  imports: [EventComponent, CommonModule, CreateAndEditEventModal],
   templateUrl: './feed.component.html',
   styleUrl: './feed.component.scss'
 })
+/**
+ * Renders the event feed and coordinates admin actions such as create, edit, and delete.
+ */
 export class FeedComponent {
   private backendService = inject(BackendService);
   private authService = inject(AuthService);
@@ -23,6 +28,7 @@ export class FeedComponent {
   isAdmin: boolean = false;
   userId: string = "";
   userGender: 'man' | 'woman' | null = null;
+  selectedEventFormId: string | null = null;
 
   /**
    * Uses the backend service to fetch all events.
@@ -122,19 +128,57 @@ export class FeedComponent {
   }
 
   /**
-   * Handles creation of an event.
+   * Opens the create form modal.
    */
-  onCreate() {
-    // TODO: Navigate to create event page
-    console.log('Create event');
+  onCreate(): void {
+    this.selectedEventFormId = '';
   }
 
   /**
-   * Handles editing of an event.
-   * @param event the event to edit.
+   * Opens the edit form modal for the given event.
    */
-  onEdit(event: Event) {
-    // TODO: Navigate to edit event page
-    console.log('Edit event:', event);
+  onEdit(event: Event): void {
+    this.selectedEventFormId = event._id;
+  }
+
+  /**
+   * Closes the shared create/edit modal.
+   */
+  closeForm(): void {
+    this.selectedEventFormId = null;
+  }
+
+  /**
+   * Applies either a newly created event or an edited event to the local feed state.
+   */
+  onEventSaved(savedEvent: Event): void {
+    const existingIndex = this.eventList.findIndex(e => e._id === savedEvent._id);
+    const now = new Date().getTime();
+    const oneHourMs = 60 * 60 * 1000;
+    const isFuture = new Date(savedEvent.date).getTime() + oneHourMs > now;
+
+    if (existingIndex >= 0) {
+      this.eventList[existingIndex] = savedEvent;
+      const futureIndex = this.futureEvents.findIndex(e => e._id === savedEvent._id);
+      if (futureIndex >= 0) {
+        this.futureEvents[futureIndex] = savedEvent;
+      }
+    } else {
+      this.eventList.push(savedEvent);
+      if (isFuture) {
+        this.futureEvents.push(savedEvent);
+      }
+    }
+
+    this.eventList.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    this.futureEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  }
+
+  /**
+   * Removes a deleted event from both the full list and the filtered future list.
+   */
+  onEventDeleted(deletedEventId: string): void {
+    this.eventList = this.eventList.filter(e => e._id !== deletedEventId);
+    this.futureEvents = this.futureEvents.filter(e => e._id !== deletedEventId);
   }
 }
