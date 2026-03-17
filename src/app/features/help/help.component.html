@@ -1,0 +1,9 @@
+<h2>Help</h2><br />
+
+<div class="help-holder" *ngFor="let qa of qas" (click)="toggleAnswer(qa)" [class.view]="qa.open">
+    <div class="help-header">
+        <div class="question">{{ qa.q }}</div>
+        <div class="arrow" [class.rotated]="qa.open"><img src="arrow.svg" /></div>
+    </div>
+    <div class="answer">{{ qa.a }}</div>
+</div>

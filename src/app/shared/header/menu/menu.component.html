@@ -21,6 +21,9 @@
     <a *ngIf="!isAdmin" routerLink="/matches" class="menu-item" (click)="closeMenu()">
       <img class="icon" src="/heart.svg" />Matches
     </a>
+    <a *ngIf="!isAdmin" routerLink="/help" class="menu-item" (click)="closeMenu()">
+      <img class="icon" src="/help.svg" />Help
+    </a>
     <a class="menu-item" (click)="logout()">
       <img class="icon" src="/logout.svg" />Log out
     </a>
