@@ -51,7 +51,8 @@ export class CreateAndEditEventModal {
     title: '',
     location: '',
     date: '',
-    maxSpots: 10,
+    time: '',
+    maxSpots: 20,
     description: ''
   };
 
@@ -137,14 +138,19 @@ export class CreateAndEditEventModal {
    * Creates a new event from the current form state.
    */
   private createEvent(): void {
+
+    // Combine into local datetime
+    const { date, time } = this.formData;
+    const combinedDate = new Date(`${date}T${time}`);
+
     this.isSaving = true;
     this.backendService.createEvent({
-        title: this.formData.title,
-        location: this.formData.location,
-        date: new Date(this.formData.date),
-        maxSpots: this.formData.maxSpots,
-        description: this.formData.description
-      })
+      title: this.formData.title,
+      location: this.formData.location,
+      date: combinedDate,
+      maxSpots: this.formData.maxSpots,
+      description: this.formData.description
+    })
       .then(created => {
         this.messageService.showSuccessMessage('Event created successfully.', 3);
         this.eventSaved.emit(created);
@@ -162,14 +168,19 @@ export class CreateAndEditEventModal {
    * Updates the currently selected event.
    */
   private updateEvent(): void {
+
+    // Combine into local datetime
+    const { date, time } = this.formData;
+    const combinedDate = new Date(`${date}T${time}`);
+
     this.isSaving = true;
     this.backendService.updateEvent(this.eventId, {
-        title: this.formData.title,
-        location: this.formData.location,
-        date: new Date(this.formData.date),
-        maxSpots: this.formData.maxSpots,
-        description: this.formData.description
-      })
+      title: this.formData.title,
+      location: this.formData.location,
+      date: combinedDate,
+      maxSpots: this.formData.maxSpots,
+      description: this.formData.description
+    })
       .then(updated => {
         this.messageService.showSuccessMessage('Event updated successfully.', 3);
         this.eventSaved.emit(updated);
@@ -236,6 +247,7 @@ export class CreateAndEditEventModal {
           title: event.title,
           location: event.location,
           date: this.toDateInputValue(event.date),
+          time: this.toTimeInputValue(event.date),
           maxSpots: event.maxSpots,
           description: event.description
         };
@@ -270,5 +282,14 @@ export class CreateAndEditEventModal {
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  /**
+ * Converts a Date into HH:mm format (local time).
+ */
+  private toTimeInputValue(date: Date): string {
+    const hours = String(date.getHours()).padStart(2, '0'); // local hours
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
   }
 }
