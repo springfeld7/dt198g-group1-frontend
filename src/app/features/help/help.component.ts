@@ -33,7 +33,27 @@ export class HelpComponent {
       "q": "How do I find this help page?",
       "a": "In the menu, select 'help'.",
       "open": false
-    }
+    }, {
+      q: "What to expect from an event?",
+      a: "You will attend three short meetings with different participants. After each meeting, you answer a few questions to help improve matching for the next round. You will be guided on who to meet and where to sit for each round.",
+      open: false
+    }, {
+      q: "Sharing contact details?",
+      a: "At the end of the event, you can choose to share your contact details with people you met. Contact details are only shared when both participants agree too.",
+      open: false
+    }, {
+      q: "What if the conversation gets awkward?",
+      a: "No worries — each meeting is short, so you're never stuck for long. Just be yourself and move on to the next match!",
+      open: false
+    }, {
+      q: "What if I accidentally fall in love after 5 minutes?",
+      a: "Then you’re ahead of schedule. Just remember there are still two more rounds to survive.",
+      open: false
+    }, {
+      q: "Will people be silently judging me the entire time?",
+      a: "Only a little. But you're also silently judging them, so it evens out.",
+      open: false
+    },
   ];
 
   toggleAnswer(qa: any) {

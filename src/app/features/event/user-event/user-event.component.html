@@ -1,7 +1,7 @@
 <div class="event-wrapper">
 
     <!-- WAITING FOR NEXT DATE -->
-    <div *ngIf="isWaiting" class="waiting-container">
+    <div *ngIf="isWaiting && !(currentRound > 3)" class="waiting-container">
         <p class="loading-text">Please wait while your next date is getting ready...</p>
     </div>
 

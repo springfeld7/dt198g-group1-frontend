@@ -34,12 +34,20 @@ export class UserEventComponent {
   answers: Record<string, any> = {};
   isWaiting = true; // true when polling for next date
   isFormOpen = false; // controls the review form modal
+  shouldOpenForm = false; // whether to open form after date ends (false if review already exists)
   dateCountdownEndTimestamp?: number;
   dateEndCountdownEndTimestamp?: number;
   dateCountdown = 0; // seconds until date starts
   dateEndCountdown = 0; // seconds for date duration countdown
   reviewCountdown = 120; // seconds for autosubmit timer
   reviewInterval?: any;
+  private startupDuration = 5_000; // 1 minute for seat finding
+  private dateDuration = 5_000; // 5 minutes for actual date
+  private reviewDuration = 90_000; // 90 seconds for autosubmit
+
+  private pollIntervalId?: any;
+  private countdownSub?: Subscription;
+  private reviewSub?: Subscription;
 
   constructor(private route: ActivatedRoute) { }
 
@@ -54,6 +62,15 @@ export class UserEventComponent {
     this.pollNextDate();
   }
 
+  /**
+   * Clears the polling interval and any active subscriptions
+   * when the component is destroyed to prevent memory leaks and unintended behavior.
+   */
+  ngOnDestroy(): void {
+    this.clearPolling();
+    this.countdownSub?.unsubscribe();
+    this.reviewSub?.unsubscribe();
+  }
 
   /**
    * Loads the event from the backend and updates the component state.
@@ -77,23 +94,54 @@ export class UserEventComponent {
    * It continues polling until a next date is assigned or after 3 rounds when the event ends.
    */
   private pollNextDate(): void {
+    this.clearPolling(); // Clear any existing polling intervals before starting a new one
     if (this.currentRound > 3) return; // stop polling after last round
 
     this.isWaiting = true;
 
     const poll = async () => {
+
+      if (this.currentRound > 3) { // Guard clause to stop polling if event ended while waiting
+        this.clearPolling();
+        return;
+      }
+
       try {
         const next = await this.backendService.getNextDate(this.eventId, this.currentRound);
 
-        // Only proceed if the next date object is valid
-        if (next && next.tableNumber && next.seat && next.user && next.user._id) {
+        if (!next || !next.tableNumber || !next.seat || !next.user?._id) {
+          // No date assigned yet → keep waiting
+          this.isWaiting = true;
+          return;
+        }
+
+        if (next.review) {
+          // Date completed + review exists → move to next round and poll again
+          this.shouldOpenForm = false;
+          this.isWaiting = true;
+          this.currentRound++;
+
+          // Check if all rounds are done
+          if (this.currentRound > 3) {
+            this.isWaiting = false;
+            console.log('All rounds completed. Event ended.');
+            this.clearPolling();
+            return;
+          }
+
+          this.nextDate = undefined;
+          this.clearPolling();
+          this.pollNextDate(); // immediately start polling for next date
+        } else {
+          // Date assigned and in progress → show it
           this.nextDate = next;
+          this.shouldOpenForm = true;
           this.isWaiting = false;
 
           // Build tables and mark your seat
           this.buildTablesWithMySeat({ tableNumber: next.tableNumber, seat: next.seat });
 
-          // Start countdown for the date
+          // Start countdown for this date
           this.startDateCountdown(next.startTime);
         }
       } catch (err) {
@@ -105,25 +153,38 @@ export class UserEventComponent {
     poll(); // initial attempt
 
     // Repeat polling every 5 seconds if nextDate not yet ready
-    const pollInterval = setInterval(() => {
-      if (!this.nextDate || !this.nextDate.tableNumber) poll();
-      else clearInterval(pollInterval);
+    this.pollIntervalId = setInterval(() => {
+      if (!this.nextDate || !this.nextDate.tableNumber) {
+        poll();
+      } else {
+        this.clearPolling();
+      }
     }, 5000);
+  }
+
+  /**
+   * Clears the polling interval to stop further requests to the backend for the next date.
+   */
+  private clearPolling(): void {
+    if (this.pollIntervalId) {
+      clearInterval(this.pollIntervalId);
+      this.pollIntervalId = undefined;
+    }
   }
 
   private startDateCountdown(startTime: Date) {
     const startMs = new Date(startTime).getTime();
 
     // 1-minute countdown until official start
-    this.dateCountdownEndTimestamp = startMs + 60_000;
+    this.dateCountdownEndTimestamp = startMs + this.startupDuration;
 
     // total end of date is startTime + 6 minutes (1 min pre + 5 min actual date)
-    this.dateEndCountdownEndTimestamp = startMs + 6 * 60_000;
+    this.dateEndCountdownEndTimestamp = startMs + this.startupDuration + this.dateDuration;
 
     this.updateDateCountdown();
     this.updateDateEndCountdown(); // immediately update
 
-    const countdownSub = interval(1000).subscribe(() => {
+    this.countdownSub = interval(1000).subscribe(() => {
       this.updateDateCountdown();
       this.updateDateEndCountdown();
 
@@ -134,8 +195,11 @@ export class UserEventComponent {
 
       // When 6-min total ends, open review form
       if (this.dateEndCountdown <= 0) {
-        countdownSub.unsubscribe();
-        this.openReviewForm();
+        this.countdownSub?.unsubscribe();
+        // Only open form if the user hasn't reviewed yet
+        if (this.shouldOpenForm) {
+          this.openReviewForm();
+        }
       }
     });
   }
@@ -188,12 +252,17 @@ export class UserEventComponent {
     this.isFormOpen = true;
     this.answers = {};
 
-    this.reviewCountdown = 120;
-    const formInterval = interval(1000).subscribe(() => {
+    // Calculate remaining time based on startTime + startup + date duration
+    const startMs = new Date(this.nextDate!.startTime).getTime();
+    const reviewEndTime = startMs + this.startupDuration + this.dateDuration + this.reviewDuration;
+    const now = Date.now();
+    this.reviewCountdown = Math.max(0, Math.floor((reviewEndTime - now) / 1000));
+
+    this.reviewSub = interval(1000).subscribe(() => {
       if (this.reviewCountdown > 0) {
         this.reviewCountdown--;
       } else {
-        formInterval.unsubscribe();
+        this.reviewSub?.unsubscribe();
         this.submitReview();
       }
     });
@@ -214,11 +283,17 @@ export class UserEventComponent {
       .then(() => {
         this.isFormOpen = false;
         this.nextDate = undefined;
+        this.shouldOpenForm = false; // reset for next poll
         this.currentRound++;
-
         // If rounds left, restart polling
         if (this.currentRound <= 3) {
+          console.log('Review submitted. Moving to next round:', this.currentRound);
+          this.clearPolling();
           this.pollNextDate();
+        } else {
+          console.log('All rounds completed. Event ended.');
+          this.clearPolling();
+          this.isWaiting = false;
         }
       })
       .catch((error) => {
@@ -261,6 +336,9 @@ export class UserEventComponent {
     return this.nextDate?.user?.interests?.map(i => i.name).join(', ') || '';
   }
 
+  /**
+   * Gets a formatted countdown string for the review autosubmit timer in MM:SS format for display in the UI.
+   */
   get reviewCountdownDisplay(): string {
     const m = Math.floor(this.reviewCountdown / 60);
     const s = this.reviewCountdown % 60;
@@ -268,11 +346,11 @@ export class UserEventComponent {
   }
 
   /**
- * Fetches the profile picture URL for a given user ID.
- *
- * @param id userId of the profile picture to fetch.
- * @returns the URL of the user's profile picture.
- */
+  * Fetches the profile picture URL for a given user ID.
+  *
+  * @param id userId of the profile picture to fetch.
+  * @returns the URL of the user's profile picture.
+  */
   getProfilePicUrl(id: string): string {
     return this.backendService.getUserPictureUrl(id);
   }

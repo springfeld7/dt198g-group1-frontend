@@ -342,6 +342,12 @@ export class OrganizerEventComponent implements OnInit {
         console.log("Updated event current round:", updatedEvent.currentRound);
         this.currentRound = updatedEvent.currentRound!; // update current round if backend changed it
         console.log(updatedEvent);
+
+        // --- NEW: increment viewedRound so organizer sees next round by default ---
+        if (this.viewedRound < 3) {
+          this.viewedRound++;
+        }
+
         this.messageService.showSuccessMessage(
           `Matches for round ${this.currentRound} finalized successfully!`,
           3
@@ -525,6 +531,7 @@ export class OrganizerEventComponent implements OnInit {
    * Toggles the matching visualization on or off.
    */
   toggleVisualization() {
+    console.log(this.viewedRound, this.roundSnapshots[this.viewedRound]);
     this.showVisualization = true;  // show visualization
     this.swapMode = false;           // disable swap mode
     this.selectedMen = [];           // clear any swap selections

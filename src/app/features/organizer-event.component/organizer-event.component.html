@@ -46,6 +46,6 @@
 </app-seating>
 
 <!-- MATCHING VISUALIZATION COMPONENT (only visible in visualization mode) -->
-<app-matching-visualization *ngIf="event && showVisualization && currentRound"
+<app-matching-visualization *ngIf="event && showVisualization"
   [snapshots]="roundSnapshots[viewedRound] || []" [men]="registeredMenUsers" [women]="registeredWomenUsers">
 </app-matching-visualization>

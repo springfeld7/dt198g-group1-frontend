@@ -3,6 +3,8 @@
  * DTO for participant's next date response in an event round.
  */
 
+import { Review } from "../review";
+
 export interface InterestDto {
   name: string;
 }
@@ -22,4 +24,5 @@ export interface NextDateResponseDto {
   tableNumber: number;
   seat: SeatType;
   startTime: Date;
+  review: Review | null;
 }
