@@ -41,8 +41,8 @@ export class UserEventComponent {
   dateEndCountdown = 0; // seconds for date duration countdown
   reviewCountdown = 120; // seconds for autosubmit timer
   reviewInterval?: any;
-  private startupDuration = 5_000; // 1 minute for seat finding
-  private dateDuration = 5_000; // 5 minutes for actual date
+  private startupDuration = 60_000; // 1 minute for seat finding
+  private dateDuration = 5 * 60_000; // 5 minutes for actual date
   private reviewDuration = 90_000; // 90 seconds for autosubmit
 
   private pollIntervalId?: any;
